@@ -19,5 +19,20 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.foxconn.iot</groupId>
+			<artifactId>assets-security</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.foxconn.iot</groupId>
+			<artifactId>assets-mapper</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+		</dependency>
 	</dependencies>
 </project>
