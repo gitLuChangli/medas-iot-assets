@@ -34,14 +34,14 @@
 
 		<javaModelGenerator
 			targetPackage="com.foxconn.iot.assets.model"
-			targetProject="\src\main\java" />
+			targetProject="src/main/java" />
 
 		<sqlMapGenerator targetPackage="com.foxconn.iot.assets.mapper"
-			targetProject="\src\main\resources" />
+			targetProject="src/main/resources" />
 
 		<javaClientGenerator type="XMLMAPPER"
 			targetPackage="com.foxconn.iot.assets.mapper"
-			targetProject="\src\main\java" />
+			targetProject="src/main/java" />
 		<!--生成全部表tableName设为% -->
 		<table tableName="%">
 			<generatedKey column="id" sqlStatement="MySql"
