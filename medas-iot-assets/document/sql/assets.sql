@@ -1,58 +1,70 @@
-drop database if exists `medas_iot_assets`;
+drop database if exists medas_iot_assets;
 
-create database `medas_iot_assets` charset=utf8;
+create database medas_iot_assets charset=utf8;
+use medas_iot_assets;
 
-use `medas_iot_assets`;
-
--- ----------------------------
--- Table structure for ums_admin
--- ----------------------------
+-- --------------------------------------
+-- Table structure for usm_admin
+-- --------------------------------------
 DROP TABLE IF EXISTS `ums_admin`;
 CREATE TABLE `ums_admin` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) DEFAULT NULL,
-  `password` varchar(64) DEFAULT NULL,
-  `icon` varchar(500) DEFAULT NULL COMMENT '头像',
-  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
-  `nick_name` varchar(200) DEFAULT NULL COMMENT '昵称',
-  `note` varchar(500) DEFAULT NULL COMMENT '备注信息',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `login_time` datetime DEFAULT NULL COMMENT '最后登录时间',
-  `status` int(1) DEFAULT '1' COMMENT '帐号启用状态：0->禁用；1->启用',
-  `company_id` bigint(20) DEFAULT NULL,
-	PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户表';
+	`id` bigint(20) not null auto_increment,
+    `username` varchar(64) default null comment '工号',
+    `password` varchar(64) default null comment '密码',
+    `nickname` varchar(64) default null comment '昵称',
+    `icon` varchar(200) default null comment '图像',
+    `email` varchar(200) default null comment '邮箱',
+    `ext` varchar(32) default null comment '分机',
+    `phone` varchar(32) default null comment '手机号',
+    `openid` varchar(32) default null comment '微信公众号openid',
+    `companyid` bigint(20) default null,
+    `note` varchar(200) default null comment '备注',
+    `create_time` datetime default null comment '创建时间',
+    `login_time` datetime default null comment '最后登录时间',
+    `status` int(1) default '1' comment '账户启用状态：0->禁用，1->启用',
+    primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='用户表';
 
--- ----------------------------
--- Table structure for ums_admin_login_log
--- ----------------------------
+insert into ums_admin values (1, 'W0515366', '$2a$10$HZkGqaLPIUyupdUjI/NOPeCYjCm.nc6DVWFuNiPVlrQ5gUwSJcpKG', '盧昌利', null, 'hzlh-cmc-rd1system@mail.foxconn.com', '560+73766', '13249466549', null, null, null, '2020-06-04 16:56:24', null, 1);
+
+-- --------------------------------------
+-- Table structure for usm_admin_login_log
+-- --------------------------------------
 DROP TABLE IF EXISTS `ums_admin_login_log`;
 CREATE TABLE `ums_admin_login_log` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `admin_id` bigint(20) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `ip` varchar(64) DEFAULT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  `user_agent` varchar(100) DEFAULT NULL COMMENT '浏览器登录类型',
+	`id` bigint(20) not null auto_increment,
+    `admin_id` bigint(20) default null,
+    `create_time` datetime default null,
+    `ip` varchar(64) default null,
+    `user_agent` varchar(100) default null comment '登录类型',
+    primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户登录日志表';
+
+-- --------------------------------------
+-- Table structure for usm_role
+-- --------------------------------------
+DROP TABLE IF EXISTS `ums_role`;
+CREATE TABLE `ums_role` (
+  `id` bigint(20)not null auto_increment,
+  `name` varchar(100) default null comment '名称',
+  `description` varchar(500) default null comment '描述',
+  `admin_count` int(11) default null comment '后台用户数量',
+  `create_time` datetime default null comment '创建时间',
+  `status` int(1) default '1' comment '启用状态：0->禁用；1->启用',
+  `sort` int(11) default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户登录日志表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户角色表';
 
 -- ----------------------------
--- Table structure for ums_menu
+-- Table structure for ums_admin_role_relation
 -- ----------------------------
-DROP TABLE IF EXISTS `ums_menu`;
-CREATE TABLE `ums_menu` (
+DROP TABLE IF EXISTS `ums_admin_role_relation`;
+CREATE TABLE `ums_admin_role_relation` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `parent_id` bigint(20) DEFAULT NULL COMMENT '父级ID',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `title` varchar(100) DEFAULT NULL COMMENT '菜单名称',
-  `level` int(4) DEFAULT NULL COMMENT '菜单级数',
-  `sort` int(4) DEFAULT NULL COMMENT '菜单排序',
-  `name` varchar(100) DEFAULT NULL COMMENT '前端名称',
-  `icon` varchar(200) DEFAULT NULL COMMENT '前端图标',
-  `hidden` int(1) DEFAULT NULL COMMENT '前端隐藏',
+  `admin_id` bigint(20) DEFAULT NULL,
+  `role_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台菜单表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户和角色关系表';
 
 -- ----------------------------
 -- Table structure for ums_permission
@@ -70,19 +82,46 @@ CREATE TABLE `ums_permission` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户权限表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户权限表';
 
 -- ----------------------------
--- Table structure for ums_admin_permission_relation
+-- Table structure for ums_role_permission_relation
 -- ----------------------------
-DROP TABLE IF EXISTS `ums_admin_permission_relation`;
-CREATE TABLE `ums_admin_permission_relation` (
+DROP TABLE IF EXISTS `ums_role_permission_relation`;
+CREATE TABLE `ums_role_permission_relation` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `admin_id` bigint(20) DEFAULT NULL,
+  `role_id` bigint(20) DEFAULT NULL,
   `permission_id` bigint(20) DEFAULT NULL,
-  `type` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户和权限关系表(除角色中定义的权限以外的加减权限)';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户角色和权限关系表';
+
+-- ----------------------------
+-- Table structure for ums_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `ums_menu`;
+CREATE TABLE `ums_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父级ID',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `title` varchar(100) DEFAULT NULL COMMENT '菜单名称',
+  `level` int(4) DEFAULT NULL COMMENT '菜单级数',
+  `sort` int(4) DEFAULT NULL COMMENT '菜单排序',
+  `name` varchar(100) DEFAULT NULL COMMENT '前端名称',
+  `icon` varchar(200) DEFAULT NULL COMMENT '前端图标',
+  `hidden` int(1) DEFAULT NULL COMMENT '前端隐藏',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台菜单表';
+
+-- ----------------------------
+-- Table structure for ums_role_menu_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `ums_role_menu_relation`;
+CREATE TABLE `ums_role_menu_relation` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
+  `menu_id` bigint(20) DEFAULT NULL COMMENT '菜单ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台角色菜单关系表';
 
 -- ----------------------------
 -- Table structure for ums_resource
@@ -96,7 +135,7 @@ CREATE TABLE `ums_resource` (
   `description` varchar(500) DEFAULT NULL COMMENT '描述',
   `category_id` bigint(20) DEFAULT NULL COMMENT '资源分类ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台资源表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台资源表';
 
 -- ----------------------------
 -- Table structure for ums_resource_category
@@ -108,55 +147,7 @@ CREATE TABLE `ums_resource_category` (
   `name` varchar(200) DEFAULT NULL COMMENT '分类名称',
   `sort` int(4) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='资源分类表';
-
--- ----------------------------
--- Table structure for ums_role
--- ----------------------------
-DROP TABLE IF EXISTS `ums_role`;
-CREATE TABLE `ums_role` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL COMMENT '名称',
-  `description` varchar(500) DEFAULT NULL COMMENT '描述',
-  `admin_count` int(11) DEFAULT NULL COMMENT '后台用户数量',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `status` int(1) DEFAULT '1' COMMENT '启用状态：0->禁用；1->启用',
-  `sort` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户角色表';
-
--- ----------------------------
--- Table structure for ums_admin_role_relation
--- ----------------------------
-DROP TABLE IF EXISTS `ums_admin_role_relation`;
-CREATE TABLE `ums_admin_role_relation` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `admin_id` bigint(20) DEFAULT NULL,
-  `role_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户和角色关系表';
-
--- ----------------------------
--- Table structure for ums_role_menu_relation
--- ----------------------------
-DROP TABLE IF EXISTS `ums_role_menu_relation`;
-CREATE TABLE `ums_role_menu_relation` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
-  `menu_id` bigint(20) DEFAULT NULL COMMENT '菜单ID',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台角色菜单关系表';
-
--- ----------------------------
--- Table structure for ums_role_permission_relation
--- ----------------------------
-DROP TABLE IF EXISTS `ums_role_permission_relation`;
-CREATE TABLE `ums_role_permission_relation` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role_id` bigint(20) DEFAULT NULL,
-  `permission_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台用户角色和权限关系表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='资源分类表';
 
 -- ----------------------------
 -- Table structure for ums_role_resource_relation
@@ -167,6 +158,23 @@ CREATE TABLE `ums_role_resource_relation` (
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `resource_id` bigint(20) DEFAULT NULL COMMENT '资源ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台角色资源关系表';
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台角色资源关系表';
 
-insert into usm_admin values (1, 'W0515366', '$2a$10$HZkGqaLPIUyupdUjI/NOPeCYjCm.nc6DVWFuNiPVlrQ5gUwSJcpKG', null, 'hzlh-cmc-rd1system@mail.foxconn.com', '盧昌利', null, '2020-06-04 16:56:24', null, 1, null);
+-- ----------------------------
+-- Table structure for ums_company
+-- ----------------------------
+DROP TABLE IF EXISTS `ums_company`;
+CREATE TABLE `ums_company` (
+	`id` bigint(20) not null auto_increment,
+    `parent_id` bigint(20) DEFAULT NULL COMMENT '父级ID',
+    `level` int(4) DEFAULT NULL COMMENT '部门级数',
+    `fee_code` varchar(32) default null comment '费用代码',
+    `name` varchar(200) default null comment '部门名称',
+    `area` varchar(200) default null comment '厂区',
+    `note` varchar(200) default null comment '备注',
+    `status` int(1) DEFAULT NULL COMMENT '启用状态；0->禁用；1->启用',
+	`create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门表';
+
+
