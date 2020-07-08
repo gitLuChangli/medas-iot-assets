@@ -11,7 +11,7 @@
 		<module>assets-entities</module>
 		<module>assets-common</module>
 		<module>assets-admin</module>
-		<module>assets-mapper</module>
+		<module>assets-mbg</module>
 	</modules>
 
 	<properties>
@@ -32,7 +32,7 @@
 		<logstash-logback.version>4.8</logstash-logback.version>
 		<assets-common.version>0.0.1-SNAPSHOT</assets-common.version>
 		<assets-security.version>0.0.1-SNAPSHOT</assets-security.version>
-		<assets-mapper.version>0.0.1-SNAPSHOT</assets-mapper.version>
+		<assets-mbg.version>0.0.1-SNAPSHOT</assets-mbg.version>
 	</properties>
 
 	<dependencies>
@@ -173,8 +173,8 @@
 
 			<dependency>
 				<groupId>com.foxconn.iot</groupId>
-				<artifactId>assets-mapper</artifactId>
-				<version>${assets-mapper.version}</version>
+				<artifactId>assets-mbg</artifactId>
+				<version>${assets-mbg.version}</version>
 			</dependency>
 
 		</dependencies>
