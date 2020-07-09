@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
 public class UmsAdmin implements Serializable {
     private Long id;
 
@@ -37,6 +40,7 @@ public class UmsAdmin implements Serializable {
     private String note;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     @ApiModelProperty(value = "最后登录时间")

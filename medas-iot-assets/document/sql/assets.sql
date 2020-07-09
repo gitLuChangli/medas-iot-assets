@@ -22,7 +22,8 @@ CREATE TABLE `ums_admin` (
     `create_time` datetime default null comment '创建时间',
     `login_time` datetime default null comment '最后登录时间',
     `status` int(1) default '1' comment '账户启用状态：0->禁用，1->启用',
-    primary key (`id`)
+    primary key (`id`),
+    unique (`username`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='用户表';
 
 insert into ums_admin values (1, 'W0515366', '$2a$10$HZkGqaLPIUyupdUjI/NOPeCYjCm.nc6DVWFuNiPVlrQ5gUwSJcpKG', '盧昌利', null, 'hzlh-cmc-rd1system@mail.foxconn.com', '560+73766', '13249466549', null, null, null, '2020-06-04 16:56:24', null, 1);
@@ -52,7 +53,8 @@ CREATE TABLE `ums_role` (
   `create_time` datetime default null comment '创建时间',
   `status` int(1) default '1' comment '启用状态：0->禁用；1->启用',
   `sort` int(11) default '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  unique (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户角色表';
 
 -- ----------------------------
@@ -81,7 +83,8 @@ CREATE TABLE `ums_permission` (
   `status` int(1) DEFAULT NULL COMMENT '启用状态；0->禁用；1->启用',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  unique (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户权限表';
 
 -- ----------------------------
@@ -109,7 +112,8 @@ CREATE TABLE `ums_menu` (
   `name` varchar(100) DEFAULT NULL COMMENT '前端名称',
   `icon` varchar(200) DEFAULT NULL COMMENT '前端图标',
   `hidden` int(1) DEFAULT NULL COMMENT '前端隐藏',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  unique (`parent_id`, `title`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台菜单表';
 
 -- ----------------------------
@@ -133,8 +137,9 @@ CREATE TABLE `ums_resource` (
   `name` varchar(200) DEFAULT NULL COMMENT '资源名称',
   `url` varchar(200) DEFAULT NULL COMMENT '资源URL',
   `description` varchar(500) DEFAULT NULL COMMENT '描述',
-  `category_id` bigint(20) DEFAULT NULL COMMENT '资源分类ID',
-  PRIMARY KEY (`id`)
+  `category_id` bigint(20) DEFAULT NULL COMMENT '资源分类ID',  
+  PRIMARY KEY (`id`),
+  unique (`name`, `category_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台资源表';
 
 -- ----------------------------
@@ -146,7 +151,8 @@ CREATE TABLE `ums_resource_category` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `name` varchar(200) DEFAULT NULL COMMENT '分类名称',
   `sort` int(4) DEFAULT NULL COMMENT '排序',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  unique (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='资源分类表';
 
 -- ----------------------------
@@ -174,7 +180,8 @@ CREATE TABLE `ums_company` (
     `note` varchar(200) default null comment '备注',
     `status` int(1) DEFAULT NULL COMMENT '启用状态；0->禁用；1->启用',
 	`create_time` datetime DEFAULT NULL COMMENT '创建时间',
-    primary key (`id`)
+    primary key (`id`),
+    unique (`fee_code`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门表';
 
 

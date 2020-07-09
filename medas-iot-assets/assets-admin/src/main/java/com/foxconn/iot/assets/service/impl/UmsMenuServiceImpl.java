@@ -34,7 +34,7 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 	 * 修改菜单层级
 	 */
 	private void updateLevel(UmsMenu umsMenu) {
-		if (umsMenu.getParentId() == 0) {
+		if (umsMenu.getParentId() == null || umsMenu.getParentId() == 0) {
 			// 没有父菜单时为一级菜单
 			umsMenu.setLevel(0);
 		} else {
