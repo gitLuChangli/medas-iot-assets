@@ -95,7 +95,7 @@
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from ums_menu
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} or parent_id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.foxconn.iot.assets.model.UmsMenuExample">
     delete from ums_menu
