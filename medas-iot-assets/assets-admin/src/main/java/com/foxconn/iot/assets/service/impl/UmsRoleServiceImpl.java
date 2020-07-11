@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.foxconn.iot.assets.dao.UmsRoleDao;
@@ -64,9 +65,21 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 	}
 
 	@Override
+	@Transactional
 	public int delete(List<Long> ids) {
 		UmsRoleExample example = new UmsRoleExample();
 		example.createCriteria().andIdIn(ids);
+		
+		/** 删除资源关系 */
+		UmsRoleResourceRelationExample rre = new UmsRoleResourceRelationExample();
+		rre.createCriteria().andRoleIdIn(ids);
+		roleResourceRelationMapper.deleteByExample(rre);
+		
+		/** 删除菜单资源 */
+		UmsRoleMenuRelationExample rmr = new UmsRoleMenuRelationExample();
+		rmr.createCriteria().andRoleIdIn(ids);
+		roleMenuRelationMapper.deleteByExample(rmr);
+		
 		int count = roleMapper.deleteByExample(example);
 		adminCacheService.delResourceListByRoleIds(ids);
 		return count;

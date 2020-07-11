@@ -101,20 +101,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.foxconn.iot.assets.model.UmsResource">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into ums_resource (create_time, name, url, 
-      description, category_id)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT})
+    insert into ums_resource (id, create_time, name, 
+      url, description, category_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.UmsResource">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into ums_resource
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -132,6 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>

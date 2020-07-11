@@ -100,20 +100,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.foxconn.iot.assets.model.UmsAdminLoginLog">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into ums_admin_login_log (admin_id, create_time, ip, 
-      user_agent)
-    values (#{adminId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR}, 
-      #{userAgent,jdbcType=VARCHAR})
+    insert into ums_admin_login_log (id, admin_id, create_time, 
+      ip, user_agent)
+    values (#{id,jdbcType=BIGINT}, #{adminId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{ip,jdbcType=VARCHAR}, #{userAgent,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.UmsAdminLoginLog">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into ums_admin_login_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="adminId != null">
         admin_id,
       </if>
@@ -128,6 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="adminId != null">
         #{adminId,jdbcType=BIGINT},
       </if>

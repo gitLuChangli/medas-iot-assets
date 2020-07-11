@@ -4,10 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-
 public class UmsAdmin implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "工号")
@@ -34,16 +32,18 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "微信公众号openid")
     private String openid;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long companyid;
 
     @ApiModelProperty(value = "备注")
     private String note;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date createTime;
 
     @ApiModelProperty(value = "最后登录时间")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date loginTime;
 
     @ApiModelProperty(value = "账户启用状态：0->禁用，1->启用")

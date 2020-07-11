@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.foxconn.iot.assets.mapper.UmsResourceCategoryMapper;
+import com.foxconn.iot.assets.mapper.UmsResourceMapper;
 import com.foxconn.iot.assets.model.UmsResourceCategory;
 import com.foxconn.iot.assets.model.UmsResourceCategoryExample;
+import com.foxconn.iot.assets.model.UmsResourceExample;
 import com.foxconn.iot.assets.service.UmsResourceCategoryService;
 
 /**
@@ -18,11 +21,13 @@ import com.foxconn.iot.assets.service.UmsResourceCategoryService;
 public class UmsResourceCategoryServiceImpl implements UmsResourceCategoryService {
 	@Autowired
 	private UmsResourceCategoryMapper resourceCategoryMapper;
+	@Autowired
+	private UmsResourceMapper resourceMapper;
 
 	@Override
 	public List<UmsResourceCategory> listAll() {
 		UmsResourceCategoryExample example = new UmsResourceCategoryExample();
-		example.setOrderByClause("sort desc");
+		example.setOrderByClause("sort asc");
 		return resourceCategoryMapper.selectByExample(example);
 	}
 
@@ -39,7 +44,11 @@ public class UmsResourceCategoryServiceImpl implements UmsResourceCategoryServic
 	}
 
 	@Override
+	@Transactional
 	public int delete(Long id) {
+		UmsResourceExample example = new UmsResourceExample();
+		example.createCriteria().andCategoryIdEqualTo(id);
+		resourceMapper.deleteByExample(example);
 		return resourceCategoryMapper.deleteByPrimaryKey(id);
 	}
 }

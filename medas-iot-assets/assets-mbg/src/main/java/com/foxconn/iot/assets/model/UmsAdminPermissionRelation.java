@@ -1,6 +1,5 @@
 package com.foxconn.iot.assets.model;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class UmsAdminPermissionRelation implements Serializable {

@@ -3,8 +3,6 @@
 <mapper namespace="com.foxconn.iot.assets.mapper.UmsCompanyMapper">
   <resultMap id="BaseResultMap" type="com.foxconn.iot.assets.model.UmsCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="level" jdbcType="INTEGER" property="level" />
     <result column="fee_code" jdbcType="VARCHAR" property="feeCode" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="area" jdbcType="VARCHAR" property="area" />
@@ -71,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, level, fee_code, name, area, note, status, create_time
+    id, fee_code, name, area, note, status, create_time
   </sql>
   <select id="selectByExample" parameterType="com.foxconn.iot.assets.model.UmsCompanyExample" resultMap="BaseResultMap">
     select
@@ -104,27 +102,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.foxconn.iot.assets.model.UmsCompany">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into ums_company (parent_id, level, fee_code, 
-      name, area, note, status, 
+    insert into ums_company (id, fee_code, name, 
+      area, note, status, 
       create_time)
-    values (#{parentId,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, #{feeCode,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{feeCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.UmsCompany">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into ums_company
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="parentId != null">
-        parent_id,
-      </if>
-      <if test="level != null">
-        level,
+      <if test="id != null">
+        id,
       </if>
       <if test="feeCode != null">
         fee_code,
@@ -146,11 +135,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="parentId != null">
-        #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="level != null">
-        #{level,jdbcType=INTEGER},
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="feeCode != null">
         #{feeCode,jdbcType=VARCHAR},
@@ -184,12 +170,6 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=BIGINT},
-      </if>
-      <if test="record.level != null">
-        level = #{record.level,jdbcType=INTEGER},
-      </if>
       <if test="record.feeCode != null">
         fee_code = #{record.feeCode,jdbcType=VARCHAR},
       </if>
@@ -216,8 +196,6 @@
   <update id="updateByExample" parameterType="map">
     update ums_company
     set id = #{record.id,jdbcType=BIGINT},
-      parent_id = #{record.parentId,jdbcType=BIGINT},
-      level = #{record.level,jdbcType=INTEGER},
       fee_code = #{record.feeCode,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       area = #{record.area,jdbcType=VARCHAR},
@@ -231,12 +209,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.foxconn.iot.assets.model.UmsCompany">
     update ums_company
     <set>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="level != null">
-        level = #{level,jdbcType=INTEGER},
-      </if>
       <if test="feeCode != null">
         fee_code = #{feeCode,jdbcType=VARCHAR},
       </if>
@@ -260,9 +232,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.foxconn.iot.assets.model.UmsCompany">
     update ums_company
-    set parent_id = #{parentId,jdbcType=BIGINT},
-      level = #{level,jdbcType=INTEGER},
-      fee_code = #{feeCode,jdbcType=VARCHAR},
+    set fee_code = #{feeCode,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       area = #{area,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},

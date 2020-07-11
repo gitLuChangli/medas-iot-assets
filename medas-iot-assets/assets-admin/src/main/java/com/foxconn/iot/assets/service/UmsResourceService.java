@@ -6,7 +6,6 @@ import com.foxconn.iot.assets.model.UmsResource;
 
 /**
  * 后台资源管理Service
- * Created by macro on 2020/2/2.
  */
 public interface UmsResourceService {
     /**

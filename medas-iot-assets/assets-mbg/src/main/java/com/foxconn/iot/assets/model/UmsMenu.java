@@ -5,12 +5,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UmsMenu implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "父级ID")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long parentId;
 
     @ApiModelProperty(value = "创建时间")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date createTime;
 
     @ApiModelProperty(value = "菜单名称")

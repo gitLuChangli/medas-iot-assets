@@ -98,18 +98,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.foxconn.iot.assets.model.UmsRoleResourceRelation">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into ums_role_resource_relation (role_id, resource_id)
-    values (#{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT})
+    insert into ums_role_resource_relation (id, role_id, resource_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.UmsRoleResourceRelation">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into ums_role_resource_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="roleId != null">
         role_id,
       </if>
@@ -118,6 +117,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="roleId != null">
         #{roleId,jdbcType=BIGINT},
       </if>

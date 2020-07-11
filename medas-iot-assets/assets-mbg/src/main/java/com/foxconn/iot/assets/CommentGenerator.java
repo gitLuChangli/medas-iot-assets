@@ -1,5 +1,7 @@
 package com.foxconn.iot.assets;
 
+import java.util.Properties;
+
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
@@ -7,8 +9,6 @@ import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.DefaultCommentGenerator;
 import org.mybatis.generator.internal.util.StringUtility;
-
-import java.util.Properties;
 
 /**
  * 自定义注释生成器
@@ -43,23 +43,34 @@ public class CommentGenerator extends DefaultCommentGenerator {
 			}
 			// 给model的字段添加swagger注解
 			field.addJavaDocLine("@ApiModelProperty(value = \"" + remarks + "\")");
+			
+			String m = field.getName() + " -> " + field.getType().getFullyQualifiedName();
+			System.out.println(m);
+		}	
+		/** 格式化時間 */
+		if(field.getType().getFullyQualifiedName().equalsIgnoreCase("java.util.Date")) {
+            field.addJavaDocLine("@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\", locale = \"GTM+8\")");
+        }
+		/** Long -> String 前端整形取值範圍不夠 */
+		if (field.getType().getFullyQualifiedName().equalsIgnoreCase("java.lang.Long")) {
+			field.addJavaDocLine("@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)");
 		}
 	}
 
 	/**
 	 * 给model的字段添加注释
 	 */
-	private void addFieldJavaDoc(Field field, String remarks) {
-		// 文档注释开始
-		field.addJavaDocLine("/**");
-		// 获取数据库字段的备注信息
-		String[] remarkLines = remarks.split(System.getProperty("line.separator"));
-		for (String remarkLine : remarkLines) {
-			field.addJavaDocLine(" * " + remarkLine);
-		}
-		addJavadocTag(field, false);
-		field.addJavaDocLine(" */");
-	}
+//	private void addFieldJavaDoc(Field field, String remarks) {
+//		// 文档注释开始
+//		field.addJavaDocLine("/**");
+//		// 获取数据库字段的备注信息
+//		String[] remarkLines = remarks.split(System.getProperty("line.separator"));
+//		for (String remarkLine : remarkLines) {
+//			field.addJavaDocLine(" * " + remarkLine);
+//		}
+//		addJavadocTag(field, false);
+//		field.addJavaDocLine(" */");
+//	}
 
 	@Override
 	public void addJavaFileComment(CompilationUnit compilationUnit) {

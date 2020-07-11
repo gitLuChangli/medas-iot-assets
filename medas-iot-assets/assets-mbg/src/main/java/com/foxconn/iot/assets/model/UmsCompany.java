@@ -5,13 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UmsCompany implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
-
-    @ApiModelProperty(value = "父级ID")
-    private Long parentId;
-
-    @ApiModelProperty(value = "部门级数")
-    private Integer level;
 
     @ApiModelProperty(value = "费用代码")
     private String feeCode;
@@ -29,6 +24,7 @@ public class UmsCompany implements Serializable {
     private Integer status;
 
     @ApiModelProperty(value = "创建时间")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
@@ -39,22 +35,6 @@ public class UmsCompany implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
     public String getFeeCode() {
@@ -112,8 +92,6 @@ public class UmsCompany implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", parentId=").append(parentId);
-        sb.append(", level=").append(level);
         sb.append(", feeCode=").append(feeCode);
         sb.append(", name=").append(name);
         sb.append(", area=").append(area);

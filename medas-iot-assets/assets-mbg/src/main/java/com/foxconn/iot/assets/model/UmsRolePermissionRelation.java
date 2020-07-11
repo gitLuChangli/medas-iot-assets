@@ -4,10 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class UmsRolePermissionRelation implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long roleId;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long permissionId;
 
     private static final long serialVersionUID = 1L;

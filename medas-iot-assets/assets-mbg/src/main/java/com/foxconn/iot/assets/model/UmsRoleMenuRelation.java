@@ -4,12 +4,15 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class UmsRoleMenuRelation implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "角色ID")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long roleId;
 
     @ApiModelProperty(value = "菜单ID")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long menuId;
 
     private static final long serialVersionUID = 1L;

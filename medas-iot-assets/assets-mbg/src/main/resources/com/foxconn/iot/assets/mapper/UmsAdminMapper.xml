@@ -110,26 +110,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.foxconn.iot.assets.model.UmsAdmin">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into ums_admin (username, password, nickname, 
-      icon, email, ext, phone, 
-      openid, companyid, note, 
-      create_time, login_time, status
-      )
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
-      #{icon,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{openid,jdbcType=VARCHAR}, #{companyid,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{loginTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
-      )
+    insert into ums_admin (id, username, password, 
+      nickname, icon, email, 
+      ext, phone, openid, 
+      companyid, note, create_time, 
+      login_time, status)
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{ext,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{companyid,jdbcType=BIGINT}, #{note,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{loginTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.UmsAdmin">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into ums_admin
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="username != null">
         username,
       </if>
@@ -171,6 +168,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>

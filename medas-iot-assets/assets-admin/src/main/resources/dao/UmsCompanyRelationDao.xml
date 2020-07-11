@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.foxconn.iot.assets.dao.UmsCompanyRelationDao">
+	<select id="getAncestors" resultType="java.lang.Long">
+		SELECT
+		cr.ancestor
+		FROM
+		ums_company_relation cr
+		WHERE
+		cr.descendant=#{descendant}
+		ORDER BY
+		cr.depth desc
+	</select>
+	<insert id="insert">
+		INSERT INTO ums_company_relation (id, ancestor, descendant, depth)
+		VALUES
+		<foreach collection="list" separator="," item="item"
+			index="index">
+			(#{item.id,jdbcType=BIGINT},
+			#{item.ancestor,jdbcType=BIGINT},
+			#{item.descendant,jdbcType=BIGINT},
+			#{item.depth,jdbcType=INTEGER})
+		</foreach>
+	</insert>
+</mapper>

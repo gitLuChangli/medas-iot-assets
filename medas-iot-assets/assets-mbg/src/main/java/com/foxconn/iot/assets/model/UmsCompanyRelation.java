@@ -3,15 +3,20 @@ package com.foxconn.iot.assets.model;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class UmsAdminRoleRelation implements Serializable {
+public class UmsCompanyRelation implements Serializable {
     @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
+    @ApiModelProperty(value = "上级部门编号")
     @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
-    private Long adminId;
+    private Long ancestor;
 
+    @ApiModelProperty(value = "部门编号")
     @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
-    private Long roleId;
+    private Long descendant;
+
+    @ApiModelProperty(value = "部门之间层级深度")
+    private Integer depth;
 
     private static final long serialVersionUID = 1L;
 
@@ -23,20 +28,28 @@ public class UmsAdminRoleRelation implements Serializable {
         this.id = id;
     }
 
-    public Long getAdminId() {
-        return adminId;
+    public Long getAncestor() {
+        return ancestor;
     }
 
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
+    public void setAncestor(Long ancestor) {
+        this.ancestor = ancestor;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public Long getDescendant() {
+        return descendant;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setDescendant(Long descendant) {
+        this.descendant = descendant;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
     }
 
     @Override
@@ -46,8 +59,9 @@ public class UmsAdminRoleRelation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", adminId=").append(adminId);
-        sb.append(", roleId=").append(roleId);
+        sb.append(", ancestor=").append(ancestor);
+        sb.append(", descendant=").append(descendant);
+        sb.append(", depth=").append(depth);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

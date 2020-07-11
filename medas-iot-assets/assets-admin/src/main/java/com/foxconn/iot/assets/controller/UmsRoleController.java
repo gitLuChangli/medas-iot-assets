@@ -147,5 +147,4 @@ public class UmsRoleController {
 		int count = roleService.allocResource(roleId, resourceIds);
 		return CommonResult.success(count);
 	}
-
 }

@@ -5,9 +5,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UmsResourceCategory implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "创建时间")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date createTime;
 
     @ApiModelProperty(value = "分类名称")

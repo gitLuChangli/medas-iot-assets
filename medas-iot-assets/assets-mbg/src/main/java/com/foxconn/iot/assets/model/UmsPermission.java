@@ -5,9 +5,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UmsPermission implements Serializable {
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "父级权限id")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
     private Long pid;
 
     @ApiModelProperty(value = "名称")
@@ -29,6 +31,7 @@ public class UmsPermission implements Serializable {
     private Integer status;
 
     @ApiModelProperty(value = "创建时间")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
     private Date createTime;
 
     @ApiModelProperty(value = "排序")
