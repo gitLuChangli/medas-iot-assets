@@ -171,9 +171,7 @@ CREATE TABLE `ums_role_resource_relation` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ums_company`;
 CREATE TABLE `ums_company` (
-	`id` bigint(20) not null auto_increment,
-    `parent_id` bigint(20) DEFAULT NULL COMMENT '父级ID',
-    `level` int(4) DEFAULT NULL COMMENT '部门级数',
+	`id` bigint(20) not null,
     `fee_code` varchar(32) default null comment '费用代码',
     `name` varchar(200) default null comment '部门名称',
     `area` varchar(200) default null comment '厂区',
@@ -183,5 +181,24 @@ CREATE TABLE `ums_company` (
     primary key (`id`),
     unique (`fee_code`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门表';
+
+-- ----------------------------
+-- Table structure for ums_company_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `ums_company_relation`;
+CREATE TABLE `ums_company_relation` (
+	`id` bigint(20) not null,
+    `ancestor` bigint(20) not null comment '上级部门编号',
+    `descendant` bigint(20) not null comment '部门编号',
+    `depth` int not null comment '部门之间层级深度',
+    primary key (`id`),
+    unique (`ancestor`, `descendant`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门关系表';
+
+select * from `ums_company_relation`;
+
+select * from `ums_company`;
+
+select a.id, a.fee_code, a.name, a.area, a.note, a.status, a.create_time, b.ancestor, b.depth from `ums_company` a left join `ums_company_relation` b on a.id = b.descendant;
 
 
