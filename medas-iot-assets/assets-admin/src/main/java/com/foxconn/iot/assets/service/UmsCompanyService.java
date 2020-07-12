@@ -15,7 +15,7 @@ public interface UmsCompanyService {
 	int update(Long id, UmsCompanyDto company);
 	
 	@Transactional
-	int delete(List<Long> ids);
+	int delete(Long id);
 	
 	List<UmsCompanyDto> list();
 	

@@ -12,15 +12,29 @@
 		ORDER BY
 		cr.depth desc
 	</select>
-	<insert id="insert">
+	<insert id="insert" parameterType="java.util.List" useGeneratedKeys="false">
 		INSERT INTO ums_company_relation (id, ancestor, descendant, depth)
 		VALUES
-		<foreach collection="list" separator="," item="item"
-			index="index">
+		<foreach collection="list" separator="," item="item" index="index">
 			(#{item.id,jdbcType=BIGINT},
 			#{item.ancestor,jdbcType=BIGINT},
 			#{item.descendant,jdbcType=BIGINT},
 			#{item.depth,jdbcType=INTEGER})
 		</foreach>
 	</insert>
+	<select id="query" resultType="com.foxconn.iot.assets.model.UmsCompanyRelationVo">
+		SELECT
+		c.id id,
+		c.fee_code feeCode,
+		c.name name,
+		c.area area,
+		c.note note,
+		c.status status,
+		c.create_time createTime,
+		r.ancestor ancestor
+		FROM ums_company c
+		LEFT JOIN ums_company_relation r
+		ON c.id=r.descendant
+		ORDER BY r.depth ASC
+	</select>
 </mapper>

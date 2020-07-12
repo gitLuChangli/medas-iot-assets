@@ -29,15 +29,18 @@ public class UmsCompanyDto {
 	@JsonView(Create.class)
 	private String area;
 	
+	@JsonView(Create.class)
 	private String note;
 	
+	@JsonView(Create.class)
 	private Integer status;
 	
 	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
 	private Date createTime;
 	
+	@JsonView(Create.class)
 	@JsonInclude(value = Include.NON_NULL)
-	private List<Long> ancestorIds;
+	private String[] ancestorIds;
 	
 	@JsonInclude(value = Include.NON_NULL)
 	private List<UmsCompanyDto> descendants;
@@ -98,11 +101,11 @@ public class UmsCompanyDto {
 		this.createTime = createTime;
 	}
 
-	public List<Long> getAncestorIds() {
+	public String[] getAncestorIds() {
 		return ancestorIds;
 	}
 
-	public void setAncestorIds(List<Long> ancestorIds) {
+	public void setAncestorIds(String[] ancestorIds) {
 		this.ancestorIds = ancestorIds;
 	}
 
