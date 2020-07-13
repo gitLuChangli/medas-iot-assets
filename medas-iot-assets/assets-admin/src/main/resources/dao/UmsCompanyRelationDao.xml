@@ -12,6 +12,13 @@
 		ORDER BY
 		cr.depth desc
 	</select>
+	<select id="getDescendants" resultType="java.lang.Long">
+		SELECT
+		cr.descendant
+		FROM ums_company_relation cr
+		WHERE
+		cr.ancestor=#{ancestor}
+	</select>
 	<insert id="insert" parameterType="java.util.List" useGeneratedKeys="false">
 		INSERT INTO ums_company_relation (id, ancestor, descendant, depth)
 		VALUES
@@ -36,5 +43,13 @@
 		LEFT JOIN ums_company_relation r
 		ON c.id=r.descendant
 		ORDER BY r.depth ASC
+	</select>
+	<select id="queryRelation" resultType="com.foxconn.iot.assets.model.UmsCompanyRelation">
+		SELECT
+		r.*
+		FROM ums_company c
+		LEFT JOIN ums_company_relation r
+		ON c.id=r.descendant
+		ORDER BY r.depth DESC
 	</select>
 </mapper>

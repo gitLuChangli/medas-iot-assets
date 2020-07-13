@@ -101,41 +101,29 @@ public class UmsCompanyServiceImpl implements UmsCompanyService {
 		companyRelationMapper.deleteByExample(example);
 		return companyMapper.deleteByPrimaryKey(id);
 	}
-
-	private Map<String, String[]> generateCompanyRelations() {
-		UmsCompanyRelationExample example = new UmsCompanyRelationExample();
-		example.setOrderByClause("depth desc");
-		List<UmsCompanyRelation> relations = companyRelationMapper.selectByExample(example);
-
-		Map<String, String[]> relationMap = new HashMap<>();
-		Map<String, Integer> depthMap = new HashMap<>();
+	
+	/** 计算层级关系，上级关系 */
+	private Map<String, List<String>> generateCompanyRelations() {
+		List<UmsCompanyRelation> relations = companyRelationDao.queryRelation();
 		String companyId;
-		int length;
+		Map<String, List<String>> relationsMap = new HashMap<String, List<String>>();
 		for (UmsCompanyRelation relation : relations) {
 			companyId = relation.getDescendant() + "";
 			if (relation.getDepth() == 0)
 				continue;
-			if (relationMap.containsKey(companyId) && depthMap.containsKey(companyId)) {
-				length = relationMap.get(companyId).length;
-				relationMap.get(companyId)[length - relation.getDepth()] = relation.getAncestor() + "";
-				depthMap.put(companyId, depthMap.get(companyId) + 1);
+			if (relationsMap.containsKey(companyId)) {
+				relationsMap.get(companyId).add(relation.getAncestor() + "");
 			} else {
-				String[] ids = new String[relation.getDepth()];
-				ids[0] = relation.getAncestor() + "";
-				relationMap.put(companyId, ids);
-				depthMap.put(companyId, 1);
+				List<String> ids = new LinkedList<String>();
+				ids.add(relation.getAncestor() + "");
+				relationsMap.put(companyId, ids);
 			}
 		}
-		for (String key : relationMap.keySet()) {
-			if (relationMap.get(key).length >  depthMap.get(key)) {
-				relationMap.put(key, Arrays.copyOfRange(relationMap.get(key), 0, depthMap.get(key)));
-			}
-		}
-		return relationMap;
+		return relationsMap;
 	}
 
 	private List<UmsCompanyDto> sort(List<UmsCompanyRelationVo> companies) {
-		Map<String, String[]> relations = generateCompanyRelations();
+		Map<String, List<String>> relations = generateCompanyRelations();
 		
 		List<UmsCompanyDto> dtos = new ArrayList<>();
 		/** 缓存自身的序号 */
@@ -153,8 +141,8 @@ public class UmsCompanyServiceImpl implements UmsCompanyService {
 				UmsCompanyDto dto = new UmsCompanyDto();
 				BeanUtils.copyProperties(company, dto);
 				selfs.add(dto);
-				if (relations.containsKey(company.getId() + "")) {
-					dto.setAncestorIds(relations.get(company.getId() + ""));
+				if (relations.containsKey(company.getId() + "")) {					
+					dto.setAncestorIds(relations.get(company.getId() + "").toArray(new String[relations.get(company.getId() + "").size()]));
 				}
 				rootIndexes.add(true);
 				realDescendants.add(false);
@@ -162,6 +150,7 @@ public class UmsCompanyServiceImpl implements UmsCompanyService {
 				rootIndexes.set(index, false);
 				int ancestorIndex = indexes.indexOf(company.getAncestor());
 				if (ancestorIndex > -1) {
+					/** 继承父类的层级关系 */
 					if (selfs.get(ancestorIndex).getDescendants() == null) {
 						List<UmsCompanyDto> dtos_ = new ArrayList<>();
 						dtos_.add(selfs.get(index));
@@ -172,6 +161,13 @@ public class UmsCompanyServiceImpl implements UmsCompanyService {
 						}
 					}
 					realDescendants.set(index, true);
+					if (selfs.get(ancestorIndex).getAncestorIds() != null) {
+						int length = selfs.get(ancestorIndex).getAncestorIds().length;
+						String[] ids = new String[length + 1];
+						ids = Arrays.copyOf(selfs.get(ancestorIndex).getAncestorIds(), length + 1);
+						ids[length] = company.getAncestor() + "";
+						selfs.get(index).setAncestorIds(ids);
+					}
 				}
 			}
 		}

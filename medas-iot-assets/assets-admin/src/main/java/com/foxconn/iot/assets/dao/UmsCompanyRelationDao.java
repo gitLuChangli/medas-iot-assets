@@ -11,9 +11,13 @@ public interface UmsCompanyRelationDao {
 
 	List<Long> getAncestors(long descendant);
 	
+	List<Long> getDescendants(long ancestor);
+	
 	int insert(@Param("list") List<UmsCompanyRelation> relations);
 	
 	List<UmsCompanyRelationVo> query();
+	
+	List<UmsCompanyRelation> queryRelation();
 	
 	
 }

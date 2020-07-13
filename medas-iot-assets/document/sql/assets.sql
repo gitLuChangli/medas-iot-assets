@@ -17,16 +17,19 @@ CREATE TABLE `ums_admin` (
     `ext` varchar(32) default null comment '分机',
     `phone` varchar(32) default null comment '手机号',
     `openid` varchar(32) default null comment '微信公众号openid',
-    `companyid` bigint(20) default null,
+    `company_id` bigint(20) default null,
     `note` varchar(200) default null comment '备注',
     `create_time` datetime default null comment '创建时间',
     `login_time` datetime default null comment '最后登录时间',
     `status` int(1) default '1' comment '账户启用状态：0->禁用，1->启用',
     primary key (`id`),
-    unique (`username`)
+    unique key (`username`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='用户表';
 
 insert into ums_admin values (1, 'W0515366', '$2a$10$HZkGqaLPIUyupdUjI/NOPeCYjCm.nc6DVWFuNiPVlrQ5gUwSJcpKG', '盧昌利', null, 'hzlh-cmc-rd1system@mail.foxconn.com', '560+73766', '13249466549', null, null, null, '2020-06-04 16:56:24', null, 1);
+
+alter table ums_admin change companyid company_id bigint(20) default null;
+alter table ums_admin add unique key (`username`);
 
 -- --------------------------------------
 -- Table structure for usm_admin_login_log
@@ -54,8 +57,10 @@ CREATE TABLE `ums_role` (
   `status` int(1) default '1' comment '启用状态：0->禁用；1->启用',
   `sort` int(11) default '0',
   PRIMARY KEY (`id`),
-  unique (`name`)
+  unique key (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户角色表';
+
+alter table ums_role add unique key (`name`);
 
 -- ----------------------------
 -- Table structure for ums_admin_role_relation
@@ -84,8 +89,10 @@ CREATE TABLE `ums_permission` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sort` int(11) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`),
-  unique (`name`)
+  unique key (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台用户权限表';
+
+alter table ums_permission add unique key (`name`);
 
 -- ----------------------------
 -- Table structure for ums_role_permission_relation
@@ -113,8 +120,10 @@ CREATE TABLE `ums_menu` (
   `icon` varchar(200) DEFAULT NULL COMMENT '前端图标',
   `hidden` int(1) DEFAULT NULL COMMENT '前端隐藏',
   PRIMARY KEY (`id`),
-  unique (`parent_id`, `title`)
+  unique key (`parent_id`, `title`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台菜单表';
+
+alter table ums_menu add unique key (`parent_id`, `title`);
 
 -- ----------------------------
 -- Table structure for ums_role_menu_relation
@@ -139,8 +148,10 @@ CREATE TABLE `ums_resource` (
   `description` varchar(500) DEFAULT NULL COMMENT '描述',
   `category_id` bigint(20) DEFAULT NULL COMMENT '资源分类ID',  
   PRIMARY KEY (`id`),
-  unique (`name`, `category_id`)
+  unique key (`name`, `category_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='后台资源表';
+
+alter table ums_resource add unique key (`name`, `category_id`);
 
 -- ----------------------------
 -- Table structure for ums_resource_category
@@ -152,8 +163,10 @@ CREATE TABLE `ums_resource_category` (
   `name` varchar(200) DEFAULT NULL COMMENT '分类名称',
   `sort` int(4) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`),
-  unique (`name`)
+  unique key (`name`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='资源分类表';
+
+alter table ums_resource_category add unique key (`name`);
 
 -- ----------------------------
 -- Table structure for ums_role_resource_relation
@@ -179,8 +192,10 @@ CREATE TABLE `ums_company` (
     `status` int(1) DEFAULT NULL COMMENT '启用状态；0->禁用；1->启用',
 	`create_time` datetime DEFAULT NULL COMMENT '创建时间',
     primary key (`id`),
-    unique (`fee_code`)
+    unique key (`fee_code`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门表';
+
+alter table ums_company add unique key (`fee_code`);
 
 -- ----------------------------
 -- Table structure for ums_company_relation
@@ -192,13 +207,8 @@ CREATE TABLE `ums_company_relation` (
     `descendant` bigint(20) not null comment '部门编号',
     `depth` int not null comment '部门之间层级深度',
     primary key (`id`),
-    unique (`ancestor`, `descendant`)
+    unique key (`ancestor`, `descendant`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门关系表';
 
-select * from `ums_company_relation`;
-
-select * from `ums_company`;
-
-select a.id, a.fee_code, a.name, a.area, a.note, a.status, a.create_time, b.ancestor, b.depth from `ums_company` a left join `ums_company_relation` b on a.id = b.descendant;
-
+alter table ums_company drop index fee_code_2;
 

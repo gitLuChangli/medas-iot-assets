@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.foxconn.iot.assets.dao.UmsAdminCompanyDao">
+	<select id="queryCompanyRelation" resultType="java.lang.Long">
+		SELECT		
+		b.ancestor 
+		FROM ums_admin a 
+		LEFT JOIN ums_company_relation b 
+		ON a.company_id = b.descendant
+		WHERE a.id=#{userid} 
+		ORDER BY b.depth desc
+	</select>
+</mapper>

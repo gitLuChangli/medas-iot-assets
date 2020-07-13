@@ -33,7 +33,7 @@ public class UmsAdmin implements Serializable {
     private String openid;
 
     @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING)
-    private Long companyid;
+    private Long companyId;
 
     @ApiModelProperty(value = "备注")
     private String note;
@@ -123,12 +123,12 @@ public class UmsAdmin implements Serializable {
         this.openid = openid;
     }
 
-    public Long getCompanyid() {
-        return companyid;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyid(Long companyid) {
-        this.companyid = companyid;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getNote() {
@@ -178,7 +178,7 @@ public class UmsAdmin implements Serializable {
         sb.append(", ext=").append(ext);
         sb.append(", phone=").append(phone);
         sb.append(", openid=").append(openid);
-        sb.append(", companyid=").append(companyid);
+        sb.append(", companyId=").append(companyId);
         sb.append(", note=").append(note);
         sb.append(", createTime=").append(createTime);
         sb.append(", loginTime=").append(loginTime);

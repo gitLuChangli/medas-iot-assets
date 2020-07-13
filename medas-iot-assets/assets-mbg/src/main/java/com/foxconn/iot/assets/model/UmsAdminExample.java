@@ -725,63 +725,63 @@ public class UmsAdminExample {
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidIsNull() {
-            addCriterion("companyid is null");
+        public Criteria andCompanyIdIsNull() {
+            addCriterion("company_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidIsNotNull() {
-            addCriterion("companyid is not null");
+        public Criteria andCompanyIdIsNotNull() {
+            addCriterion("company_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidEqualTo(Long value) {
-            addCriterion("companyid =", value, "companyid");
+        public Criteria andCompanyIdEqualTo(Long value) {
+            addCriterion("company_id =", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotEqualTo(Long value) {
-            addCriterion("companyid <>", value, "companyid");
+        public Criteria andCompanyIdNotEqualTo(Long value) {
+            addCriterion("company_id <>", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidGreaterThan(Long value) {
-            addCriterion("companyid >", value, "companyid");
+        public Criteria andCompanyIdGreaterThan(Long value) {
+            addCriterion("company_id >", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidGreaterThanOrEqualTo(Long value) {
-            addCriterion("companyid >=", value, "companyid");
+        public Criteria andCompanyIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("company_id >=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidLessThan(Long value) {
-            addCriterion("companyid <", value, "companyid");
+        public Criteria andCompanyIdLessThan(Long value) {
+            addCriterion("company_id <", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidLessThanOrEqualTo(Long value) {
-            addCriterion("companyid <=", value, "companyid");
+        public Criteria andCompanyIdLessThanOrEqualTo(Long value) {
+            addCriterion("company_id <=", value, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidIn(List<Long> values) {
-            addCriterion("companyid in", values, "companyid");
+        public Criteria andCompanyIdIn(List<Long> values) {
+            addCriterion("company_id in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotIn(List<Long> values) {
-            addCriterion("companyid not in", values, "companyid");
+        public Criteria andCompanyIdNotIn(List<Long> values) {
+            addCriterion("company_id not in", values, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidBetween(Long value1, Long value2) {
-            addCriterion("companyid between", value1, value2, "companyid");
+        public Criteria andCompanyIdBetween(Long value1, Long value2) {
+            addCriterion("company_id between", value1, value2, "companyId");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyidNotBetween(Long value1, Long value2) {
-            addCriterion("companyid not between", value1, value2, "companyid");
+        public Criteria andCompanyIdNotBetween(Long value1, Long value2) {
+            addCriterion("company_id not between", value1, value2, "companyId");
             return (Criteria) this;
         }
 

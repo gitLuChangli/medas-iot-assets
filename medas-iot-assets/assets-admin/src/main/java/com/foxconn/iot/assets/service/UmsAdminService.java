@@ -3,6 +3,7 @@ package com.foxconn.iot.assets.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.foxconn.iot.assets.dto.UmsAdminDto;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
@@ -48,7 +49,7 @@ public interface UmsAdminService {
     /**
      * 根据用户名或昵称分页查询用户
      */
-    List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
+    List<UmsAdmin> list(String keyword, Long companyId, Integer pageSize, Integer pageNum);
 
     /**
      * 修改指定用户信息
@@ -96,4 +97,17 @@ public interface UmsAdminService {
      * 获取用户信息
      */
     UserDetails loadUserByUsername(String username);
+    
+    int create(UmsAdminDto admin);
+    
+    @Transactional
+    int update(Long id, UmsAdminDto admin);
+    
+    List<Long> queryCompanyRelation(Long userid);
+    
+    @Transactional
+    int disable(Long id, int status);
+    
+    @Transactional
+    int resetPassword(Long id);
 }

@@ -25,14 +25,19 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.foxconn.iot.assets.bo.AdminUserDetails;
+import com.foxconn.iot.assets.common.api.Snowflaker;
+import com.foxconn.iot.assets.dao.UmsAdminCompanyDao;
 import com.foxconn.iot.assets.dao.UmsAdminPermissionRelationDao;
 import com.foxconn.iot.assets.dao.UmsAdminRoleRelationDao;
+import com.foxconn.iot.assets.dao.UmsCompanyRelationDao;
+import com.foxconn.iot.assets.dto.UmsAdminDto;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.mapper.UmsAdminLoginLogMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminPermissionRelationMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminRoleRelationMapper;
+import com.foxconn.iot.assets.mapper.UmsCompanyMapper;
 import com.foxconn.iot.assets.model.UmsAdmin;
 import com.foxconn.iot.assets.model.UmsAdminExample;
 import com.foxconn.iot.assets.model.UmsAdminLoginLog;
@@ -40,6 +45,7 @@ import com.foxconn.iot.assets.model.UmsAdminPermissionRelation;
 import com.foxconn.iot.assets.model.UmsAdminPermissionRelationExample;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelation;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelationExample;
+import com.foxconn.iot.assets.model.UmsCompany;
 import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
@@ -52,7 +58,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * UmsAdminService实现类 Created by macro on 2018/4/26.
+ * UmsAdminService实现类
  */
 @Service
 public class UmsAdminServiceImpl implements UmsAdminService {
@@ -75,6 +81,12 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	private UmsAdminLoginLogMapper loginLogMapper;
 	@Autowired
 	private UmsAdminCacheService adminCacheService;
+	@Autowired
+	private UmsAdminCompanyDao adminCompanyDao;
+	@Autowired
+	private UmsCompanyRelationDao companyRelationDao;
+	@Autowired
+	private UmsCompanyMapper companyMapper;
 
 	@Override
 	public UmsAdmin getAdminByUsername(String username) {
@@ -173,14 +185,20 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	}
 
 	@Override
-	public List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
-		PageHelper.startPage(pageNum, pageSize);
+	public List<UmsAdmin> list(String keyword, Long companyId, Integer pageSize, Integer pageNum) {		
 		UmsAdminExample example = new UmsAdminExample();
 		UmsAdminExample.Criteria criteria = example.createCriteria();
 		if (!StringUtils.isEmpty(keyword)) {
 			criteria.andUsernameLike("%" + keyword + "%");
 			example.or(example.createCriteria().andNicknameLike("%" + keyword + "%"));
 		}
+		if (companyId != null && companyId > 0) {
+			List<Long> companyIds = companyRelationDao.getDescendants(companyId);
+			if (companyIds != null && companyIds.size() > 0) {
+				criteria.andCompanyIdIn(companyIds);
+			}
+		}
+		PageHelper.startPage(pageNum, pageSize);
 		return adminMapper.selectByExample(example);
 	}
 
@@ -327,5 +345,62 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 			return new AdminUserDetails(admin, resourceList);
 		}
 		throw new UsernameNotFoundException("用户名或密码错误");
+	}
+	
+	@Override
+	public int create(UmsAdminDto admin) {
+		UmsAdmin umsAdmin = new UmsAdmin();
+		BeanUtils.copyProperties(admin, umsAdmin);
+		if (admin.getCompanyIds() == null || admin.getCompanyIds().length == 0) {
+			return 0;
+		}
+		Long companyId = Long.parseLong(admin.getCompanyIds()[admin.getCompanyIds().length - 1]);
+		UmsCompany company = companyMapper.selectByPrimaryKey(companyId);
+		if (company == null) {
+			return 0;
+		}
+		umsAdmin.setCompanyId(companyId);
+		umsAdmin.setPassword(passwordEncoder.encode("password"));
+		umsAdmin.setId(Snowflaker.getId());
+		return adminMapper.insert(umsAdmin);
+	}
+	
+	@Override
+	public int update(Long id, UmsAdminDto admin) {
+		UmsAdmin umsAdmin = new UmsAdmin();
+		BeanUtils.copyProperties(admin, umsAdmin);
+		umsAdmin.setId(id);
+		if (admin.getCompanyIds() == null || admin.getCompanyIds().length == 0) {
+			return 0;
+		}
+		Long companyId = Long.parseLong(admin.getCompanyIds()[admin.getCompanyIds().length - 1]);
+		UmsCompany company = companyMapper.selectByPrimaryKey(companyId);
+		if (company == null) {
+			return 0;
+		}
+		umsAdmin.setCompanyId(companyId);
+		umsAdmin.setId(id);
+		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
+	}
+	
+	@Override
+	public List<Long> queryCompanyRelation(Long userid) {
+		return adminCompanyDao.queryCompanyRelation(userid);
+	}
+	
+	@Override
+	public int disable(Long id, int status) {
+		UmsAdmin umsAdmin = new UmsAdmin();
+		umsAdmin.setId(id);
+		umsAdmin.setStatus(status);		
+		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
+	}
+	
+	@Override
+	public int resetPassword(Long id) {
+		UmsAdmin umsAdmin = new UmsAdmin();
+		umsAdmin.setId(id);
+		umsAdmin.setPassword(passwordEncoder.encode("password"));
+		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
 	}
 }
