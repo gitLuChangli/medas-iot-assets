@@ -13,6 +13,7 @@
 		<module>assets-admin</module>
 		<module>assets-mbg</module>
 		<module>assets-file</module>
+		<module>assets-mongo</module>
 	</modules>
 
 	<properties>
@@ -34,6 +35,7 @@
 		<assets-common.version>0.0.1-SNAPSHOT</assets-common.version>
 		<assets-security.version>0.0.1-SNAPSHOT</assets-security.version>
 		<assets-mbg.version>0.0.1-SNAPSHOT</assets-mbg.version>
+		<assets-mongo.version>0.0.1-SNAPSHOT</assets-mongo.version>
 	</properties>
 
 	<dependencies>
@@ -168,6 +170,12 @@
 				<groupId>com.foxconn.iot</groupId>
 				<artifactId>assets-mbg</artifactId>
 				<version>${assets-mbg.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.foxconn.iot</groupId>
+				<artifactId>assets-mongo</artifactId>
+				<version>${assets-mongo.version}</version>
 			</dependency>
 
 		</dependencies>

@@ -41,6 +41,11 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.foxconn.iot</groupId>
+			<artifactId>assets-mongo</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 		</dependency>
