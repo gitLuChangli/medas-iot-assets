@@ -14,4 +14,6 @@ public interface AssetsDao {
 	Page<Asset> query(Long companyId, Pageable pageable);
 	
 	long count(Long companyId);	
+	
+	List<Asset> query(Long companyId, List<Long> ids);
 }

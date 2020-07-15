@@ -11,41 +11,33 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
-import com.foxconn.iot.assets.mongo.dao.AssetsDao;
-import com.foxconn.iot.assets.mongo.document.Asset;
+import com.foxconn.iot.assets.mongo.dao.WorkOrderDao;
+import com.foxconn.iot.assets.mongo.document.WorkOrder;
 
 @Component
-public class AssetsDaoImpl implements AssetsDao {
-
+public class WorkOrderDaoImpl implements WorkOrderDao {
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public void save(List<Asset> assets) {
-		mongoTemplate.insertAll(assets);
+	public void create(WorkOrder wo) {
+		mongoTemplate.insert(wo);
 	}
 
 	@Override
-	public Page<Asset> query(Long companyId, Pageable pageable) {
+	public Page<WorkOrder> query(Long companyId, Pageable pageable) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("companyId").is(companyId));
 		query.with(pageable);
-		List<Asset> assets = mongoTemplate.find(query, Asset.class);		
-		return new PageImpl<>(assets, pageable, count(companyId));
+		List<WorkOrder> wos = mongoTemplate.find(query, WorkOrder.class);
+		return new PageImpl<>(wos, pageable, count(companyId));
 	}
 
 	@Override
 	public long count(Long companyId) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("companyId").is(companyId));
-		return mongoTemplate.count(query, Asset.class);
-	}
-
-	@Override
-	public List<Asset> query(Long companyId, List<Long> ids) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("companyId").is(companyId));
-		query.addCriteria(Criteria.where("id").in(ids));		
-		return mongoTemplate.find(query, Asset.class);
+		return mongoTemplate.count(query, WorkOrder.class);
 	}
 }

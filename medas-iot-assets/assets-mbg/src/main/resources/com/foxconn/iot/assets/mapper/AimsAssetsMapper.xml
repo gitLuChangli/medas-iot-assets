@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foxconn.iot.assets.mapper.AimsAssetsMapper">
+  <resultMap id="BaseResultMap" type="com.foxconn.iot.assets.model.AimsAssets">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="gzh_num" jdbcType="VARCHAR" property="gzhNum" />
+    <result column="cch_num" jdbcType="VARCHAR" property="cchNum" />
+    <result column="shb_name" jdbcType="VARCHAR" property="shbName" />
+    <result column="shb_brand" jdbcType="VARCHAR" property="shbBrand" />
+    <result column="shb_spec" jdbcType="VARCHAR" property="shbSpec" />
+    <result column="fy_type" jdbcType="VARCHAR" property="fyType" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="price" jdbcType="VARCHAR" property="price" />
+    <result column="chsh_code" jdbcType="VARCHAR" property="chshCode" />
+    <result column="chsh_name" jdbcType="VARCHAR" property="chshName" />
+    <result column="xq_department" jdbcType="VARCHAR" property="xqDepartment" />
+    <result column="she_area" jdbcType="VARCHAR" property="sheArea" />
+    <result column="shb_weight" jdbcType="VARCHAR" property="shbWeight" />
+    <result column="shb_sn" jdbcType="VARCHAR" property="shbSn" />
+    <result column="project" jdbcType="VARCHAR" property="project" />
+    <result column="segment" jdbcType="VARCHAR" property="segment" />
+    <result column="gzh_name" jdbcType="VARCHAR" property="gzhName" />
+    <result column="shb_status" jdbcType="VARCHAR" property="shbStatus" />
+    <result column="building" jdbcType="VARCHAR" property="building" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="xianti" jdbcType="VARCHAR" property="xianti" />
+    <result column="po_num" jdbcType="VARCHAR" property="poNum" />
+    <result column="ly_emp" jdbcType="VARCHAR" property="lyEmp" />
+    <result column="ly_emp_name" jdbcType="VARCHAR" property="lyEmpName" />
+    <result column="dh_time" jdbcType="VARCHAR" property="dhTime" />
+    <result column="jy_time" jdbcType="VARCHAR" property="jyTime" />
+    <result column="yj_cycle" jdbcType="VARCHAR" property="yjCycle" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, company_id, gzh_num, cch_num, shb_name, shb_brand, shb_spec, fy_type, unit, price, 
+    chsh_code, chsh_name, xq_department, she_area, shb_weight, shb_sn, project, segment, 
+    gzh_name, shb_status, building, floor, xianti, po_num, ly_emp, ly_emp_name, dh_time, 
+    jy_time, yj_cycle, note
+  </sql>
+  <select id="selectByExample" parameterType="com.foxconn.iot.assets.model.AimsAssetsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from aims_assets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from aims_assets
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from aims_assets
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.foxconn.iot.assets.model.AimsAssetsExample">
+    delete from aims_assets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.foxconn.iot.assets.model.AimsAssets">
+    insert into aims_assets (id, company_id, gzh_num, 
+      cch_num, shb_name, shb_brand, 
+      shb_spec, fy_type, unit, 
+      price, chsh_code, chsh_name, 
+      xq_department, she_area, shb_weight, 
+      shb_sn, project, segment, 
+      gzh_name, shb_status, building, 
+      floor, xianti, po_num, 
+      ly_emp, ly_emp_name, dh_time, 
+      jy_time, yj_cycle, note
+      )
+    values (#{id,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{gzhNum,jdbcType=VARCHAR}, 
+      #{cchNum,jdbcType=VARCHAR}, #{shbName,jdbcType=VARCHAR}, #{shbBrand,jdbcType=VARCHAR}, 
+      #{shbSpec,jdbcType=VARCHAR}, #{fyType,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{price,jdbcType=VARCHAR}, #{chshCode,jdbcType=VARCHAR}, #{chshName,jdbcType=VARCHAR}, 
+      #{xqDepartment,jdbcType=VARCHAR}, #{sheArea,jdbcType=VARCHAR}, #{shbWeight,jdbcType=VARCHAR}, 
+      #{shbSn,jdbcType=VARCHAR}, #{project,jdbcType=VARCHAR}, #{segment,jdbcType=VARCHAR}, 
+      #{gzhName,jdbcType=VARCHAR}, #{shbStatus,jdbcType=VARCHAR}, #{building,jdbcType=VARCHAR}, 
+      #{floor,jdbcType=VARCHAR}, #{xianti,jdbcType=VARCHAR}, #{poNum,jdbcType=VARCHAR}, 
+      #{lyEmp,jdbcType=VARCHAR}, #{lyEmpName,jdbcType=VARCHAR}, #{dhTime,jdbcType=VARCHAR}, 
+      #{jyTime,jdbcType=VARCHAR}, #{yjCycle,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.foxconn.iot.assets.model.AimsAssets">
+    insert into aims_assets
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="gzhNum != null">
+        gzh_num,
+      </if>
+      <if test="cchNum != null">
+        cch_num,
+      </if>
+      <if test="shbName != null">
+        shb_name,
+      </if>
+      <if test="shbBrand != null">
+        shb_brand,
+      </if>
+      <if test="shbSpec != null">
+        shb_spec,
+      </if>
+      <if test="fyType != null">
+        fy_type,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="chshCode != null">
+        chsh_code,
+      </if>
+      <if test="chshName != null">
+        chsh_name,
+      </if>
+      <if test="xqDepartment != null">
+        xq_department,
+      </if>
+      <if test="sheArea != null">
+        she_area,
+      </if>
+      <if test="shbWeight != null">
+        shb_weight,
+      </if>
+      <if test="shbSn != null">
+        shb_sn,
+      </if>
+      <if test="project != null">
+        project,
+      </if>
+      <if test="segment != null">
+        segment,
+      </if>
+      <if test="gzhName != null">
+        gzh_name,
+      </if>
+      <if test="shbStatus != null">
+        shb_status,
+      </if>
+      <if test="building != null">
+        building,
+      </if>
+      <if test="floor != null">
+        floor,
+      </if>
+      <if test="xianti != null">
+        xianti,
+      </if>
+      <if test="poNum != null">
+        po_num,
+      </if>
+      <if test="lyEmp != null">
+        ly_emp,
+      </if>
+      <if test="lyEmpName != null">
+        ly_emp_name,
+      </if>
+      <if test="dhTime != null">
+        dh_time,
+      </if>
+      <if test="jyTime != null">
+        jy_time,
+      </if>
+      <if test="yjCycle != null">
+        yj_cycle,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="gzhNum != null">
+        #{gzhNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cchNum != null">
+        #{cchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="shbName != null">
+        #{shbName,jdbcType=VARCHAR},
+      </if>
+      <if test="shbBrand != null">
+        #{shbBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="shbSpec != null">
+        #{shbSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="fyType != null">
+        #{fyType,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="chshCode != null">
+        #{chshCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chshName != null">
+        #{chshName,jdbcType=VARCHAR},
+      </if>
+      <if test="xqDepartment != null">
+        #{xqDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="sheArea != null">
+        #{sheArea,jdbcType=VARCHAR},
+      </if>
+      <if test="shbWeight != null">
+        #{shbWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="shbSn != null">
+        #{shbSn,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null">
+        #{project,jdbcType=VARCHAR},
+      </if>
+      <if test="segment != null">
+        #{segment,jdbcType=VARCHAR},
+      </if>
+      <if test="gzhName != null">
+        #{gzhName,jdbcType=VARCHAR},
+      </if>
+      <if test="shbStatus != null">
+        #{shbStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="building != null">
+        #{building,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="xianti != null">
+        #{xianti,jdbcType=VARCHAR},
+      </if>
+      <if test="poNum != null">
+        #{poNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lyEmp != null">
+        #{lyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="lyEmpName != null">
+        #{lyEmpName,jdbcType=VARCHAR},
+      </if>
+      <if test="dhTime != null">
+        #{dhTime,jdbcType=VARCHAR},
+      </if>
+      <if test="jyTime != null">
+        #{jyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="yjCycle != null">
+        #{yjCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.foxconn.iot.assets.model.AimsAssetsExample" resultType="java.lang.Long">
+    select count(*) from aims_assets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update aims_assets
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.gzhNum != null">
+        gzh_num = #{record.gzhNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cchNum != null">
+        cch_num = #{record.cchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbName != null">
+        shb_name = #{record.shbName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbBrand != null">
+        shb_brand = #{record.shbBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbSpec != null">
+        shb_spec = #{record.shbSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fyType != null">
+        fy_type = #{record.fyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chshCode != null">
+        chsh_code = #{record.chshCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chshName != null">
+        chsh_name = #{record.chshName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xqDepartment != null">
+        xq_department = #{record.xqDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sheArea != null">
+        she_area = #{record.sheArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbWeight != null">
+        shb_weight = #{record.shbWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbSn != null">
+        shb_sn = #{record.shbSn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.project != null">
+        project = #{record.project,jdbcType=VARCHAR},
+      </if>
+      <if test="record.segment != null">
+        segment = #{record.segment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gzhName != null">
+        gzh_name = #{record.gzhName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shbStatus != null">
+        shb_status = #{record.shbStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.building != null">
+        building = #{record.building,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floor != null">
+        floor = #{record.floor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xianti != null">
+        xianti = #{record.xianti,jdbcType=VARCHAR},
+      </if>
+      <if test="record.poNum != null">
+        po_num = #{record.poNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lyEmp != null">
+        ly_emp = #{record.lyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lyEmpName != null">
+        ly_emp_name = #{record.lyEmpName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dhTime != null">
+        dh_time = #{record.dhTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jyTime != null">
+        jy_time = #{record.jyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yjCycle != null">
+        yj_cycle = #{record.yjCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update aims_assets
+    set id = #{record.id,jdbcType=BIGINT},
+      company_id = #{record.companyId,jdbcType=BIGINT},
+      gzh_num = #{record.gzhNum,jdbcType=VARCHAR},
+      cch_num = #{record.cchNum,jdbcType=VARCHAR},
+      shb_name = #{record.shbName,jdbcType=VARCHAR},
+      shb_brand = #{record.shbBrand,jdbcType=VARCHAR},
+      shb_spec = #{record.shbSpec,jdbcType=VARCHAR},
+      fy_type = #{record.fyType,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=VARCHAR},
+      chsh_code = #{record.chshCode,jdbcType=VARCHAR},
+      chsh_name = #{record.chshName,jdbcType=VARCHAR},
+      xq_department = #{record.xqDepartment,jdbcType=VARCHAR},
+      she_area = #{record.sheArea,jdbcType=VARCHAR},
+      shb_weight = #{record.shbWeight,jdbcType=VARCHAR},
+      shb_sn = #{record.shbSn,jdbcType=VARCHAR},
+      project = #{record.project,jdbcType=VARCHAR},
+      segment = #{record.segment,jdbcType=VARCHAR},
+      gzh_name = #{record.gzhName,jdbcType=VARCHAR},
+      shb_status = #{record.shbStatus,jdbcType=VARCHAR},
+      building = #{record.building,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      xianti = #{record.xianti,jdbcType=VARCHAR},
+      po_num = #{record.poNum,jdbcType=VARCHAR},
+      ly_emp = #{record.lyEmp,jdbcType=VARCHAR},
+      ly_emp_name = #{record.lyEmpName,jdbcType=VARCHAR},
+      dh_time = #{record.dhTime,jdbcType=VARCHAR},
+      jy_time = #{record.jyTime,jdbcType=VARCHAR},
+      yj_cycle = #{record.yjCycle,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.foxconn.iot.assets.model.AimsAssets">
+    update aims_assets
+    <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="gzhNum != null">
+        gzh_num = #{gzhNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cchNum != null">
+        cch_num = #{cchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="shbName != null">
+        shb_name = #{shbName,jdbcType=VARCHAR},
+      </if>
+      <if test="shbBrand != null">
+        shb_brand = #{shbBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="shbSpec != null">
+        shb_spec = #{shbSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="fyType != null">
+        fy_type = #{fyType,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="chshCode != null">
+        chsh_code = #{chshCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chshName != null">
+        chsh_name = #{chshName,jdbcType=VARCHAR},
+      </if>
+      <if test="xqDepartment != null">
+        xq_department = #{xqDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="sheArea != null">
+        she_area = #{sheArea,jdbcType=VARCHAR},
+      </if>
+      <if test="shbWeight != null">
+        shb_weight = #{shbWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="shbSn != null">
+        shb_sn = #{shbSn,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null">
+        project = #{project,jdbcType=VARCHAR},
+      </if>
+      <if test="segment != null">
+        segment = #{segment,jdbcType=VARCHAR},
+      </if>
+      <if test="gzhName != null">
+        gzh_name = #{gzhName,jdbcType=VARCHAR},
+      </if>
+      <if test="shbStatus != null">
+        shb_status = #{shbStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="building != null">
+        building = #{building,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null">
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="xianti != null">
+        xianti = #{xianti,jdbcType=VARCHAR},
+      </if>
+      <if test="poNum != null">
+        po_num = #{poNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lyEmp != null">
+        ly_emp = #{lyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="lyEmpName != null">
+        ly_emp_name = #{lyEmpName,jdbcType=VARCHAR},
+      </if>
+      <if test="dhTime != null">
+        dh_time = #{dhTime,jdbcType=VARCHAR},
+      </if>
+      <if test="jyTime != null">
+        jy_time = #{jyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="yjCycle != null">
+        yj_cycle = #{yjCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.foxconn.iot.assets.model.AimsAssets">
+    update aims_assets
+    set company_id = #{companyId,jdbcType=BIGINT},
+      gzh_num = #{gzhNum,jdbcType=VARCHAR},
+      cch_num = #{cchNum,jdbcType=VARCHAR},
+      shb_name = #{shbName,jdbcType=VARCHAR},
+      shb_brand = #{shbBrand,jdbcType=VARCHAR},
+      shb_spec = #{shbSpec,jdbcType=VARCHAR},
+      fy_type = #{fyType,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      chsh_code = #{chshCode,jdbcType=VARCHAR},
+      chsh_name = #{chshName,jdbcType=VARCHAR},
+      xq_department = #{xqDepartment,jdbcType=VARCHAR},
+      she_area = #{sheArea,jdbcType=VARCHAR},
+      shb_weight = #{shbWeight,jdbcType=VARCHAR},
+      shb_sn = #{shbSn,jdbcType=VARCHAR},
+      project = #{project,jdbcType=VARCHAR},
+      segment = #{segment,jdbcType=VARCHAR},
+      gzh_name = #{gzhName,jdbcType=VARCHAR},
+      shb_status = #{shbStatus,jdbcType=VARCHAR},
+      building = #{building,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=VARCHAR},
+      xianti = #{xianti,jdbcType=VARCHAR},
+      po_num = #{poNum,jdbcType=VARCHAR},
+      ly_emp = #{lyEmp,jdbcType=VARCHAR},
+      ly_emp_name = #{lyEmpName,jdbcType=VARCHAR},
+      dh_time = #{dhTime,jdbcType=VARCHAR},
+      jy_time = #{jyTime,jdbcType=VARCHAR},
+      yj_cycle = #{yjCycle,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
