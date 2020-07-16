@@ -110,4 +110,6 @@ public interface UmsAdminService {
     
     @Transactional
     int resetPassword(Long id);
+    
+    List<UmsAdmin> queryByCompany(Long companyId);
 }

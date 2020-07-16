@@ -269,4 +269,11 @@ public class UmsAdminController {
     		return CommonResult.failed();
     	}
     }
+    
+    @ApiOperation(value = "查詢部門所有用戶")
+    @GetMapping(value = "/company/{id:\\d+}")
+    public CommonResult<?> queryCompanyUsers(@PathVariable(value = "id") Long companyId) {
+    	List<UmsAdmin> users = adminService.queryByCompany(companyId);
+    	return CommonResult.success(users);
+    }
 }

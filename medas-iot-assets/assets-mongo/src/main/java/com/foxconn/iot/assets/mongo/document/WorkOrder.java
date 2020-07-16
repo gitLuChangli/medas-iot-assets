@@ -14,34 +14,41 @@ import io.swagger.annotations.ApiModelProperty;
 @Document(collection = "work_order")
 public class WorkOrder {
 	
-	@ApiModelProperty(value = "工单号")
+	@ApiModelProperty(value = "工單號")
 	@Id
 	@JsonFormat(shape = Shape.STRING)
 	private Long id;
 
-	@ApiModelProperty(value = "部门编号")
+	@ApiModelProperty(value = "部門編號")
 	@JsonFormat(shape = Shape.STRING)
 	private Long companyId;
 	
-	@ApiModelProperty(value = "盘点资产清单")
+	@ApiModelProperty(value = "資產清單")
 	private List<WorkOrderItem> items;
 	
-	@ApiModelProperty(value = "盘点资产数量")
+	@ApiModelProperty(value = "資產數量")
 	private Integer count;
 	
-	@ApiModelProperty(value = "已盘点数量")
+	@ApiModelProperty(value = "已盤點數量")
 	private Integer counted;
 	
-	@ApiModelProperty(value = "工单状态")
+	@ApiModelProperty(value = "工單狀態")
 	private Integer status;
 	
 	@ApiModelProperty(value = "盤點人")
 	private List<String> usernames;
 	
 	@ApiModelProperty(value = "創建時間")
-	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
 
+	@ApiModelProperty(value = "結單時間")
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date completeTime;
+	
+	@ApiModelProperty(value = "備註")
+	private String note;
+	
 	public Long getId() {
 		return id;
 	}
@@ -104,5 +111,21 @@ public class WorkOrder {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	
+	public Date getCompleteTime() {
+		return completeTime;
+	}
+
+	public void setCompleteTime(Date completeTime) {
+		this.completeTime = completeTime;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 }

@@ -403,4 +403,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		umsAdmin.setPassword(passwordEncoder.encode("password"));
 		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
 	}
+	
+	@Override
+	public List<UmsAdmin> queryByCompany(Long companyId) {
+		UmsAdminExample example = new UmsAdminExample();
+		example.createCriteria().andCompanyIdEqualTo(companyId);
+		return adminMapper.selectByExample(example);
+	}
 }

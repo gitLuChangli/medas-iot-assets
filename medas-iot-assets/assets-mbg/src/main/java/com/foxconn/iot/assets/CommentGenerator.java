@@ -49,7 +49,7 @@ public class CommentGenerator extends DefaultCommentGenerator {
 		}	
 		/** 格式化時間 */
 		if(field.getType().getFullyQualifiedName().equalsIgnoreCase("java.util.Date")) {
-            field.addJavaDocLine("@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\", locale = \"GTM+8\")");
+            field.addJavaDocLine("@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\", timezone = \"GMT+8\")");
         }
 		/** Long -> String 前端整形取值範圍不夠 */
 		if (field.getType().getFullyQualifiedName().equalsIgnoreCase("java.lang.Long")) {

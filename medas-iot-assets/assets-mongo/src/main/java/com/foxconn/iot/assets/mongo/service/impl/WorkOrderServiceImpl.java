@@ -50,8 +50,27 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	}
 
 	@Override
-	public Page<WorkOrder> query(Long companyId, Pageable pageable) {
-		return workOrderDao.query(companyId, pageable);
+	public Page<WorkOrder> query(Long companyId, String start, String end, String keyword, Pageable pageable) {
+		return workOrderDao.query(companyId, start, end, keyword, pageable);
 	}
 
+	@Override
+	public long setWorkers(Long woId, List<String> usernames) {
+		return workOrderDao.setWorkers(woId, usernames);
+	}
+
+	@Override
+	public long complete(Long woId, String note) {
+		return workOrderDao.complete(woId, note);
+	}
+
+	@Override
+	public long delete(Long id) {
+		return workOrderDao.delete(id);
+	}
+
+	@Override
+	public Page<WorkOrder> queryByUsername(String username, String start, String end, Pageable pageable) {
+		return workOrderDao.queryByUsername(username, start, end, pageable);
+	}
 }

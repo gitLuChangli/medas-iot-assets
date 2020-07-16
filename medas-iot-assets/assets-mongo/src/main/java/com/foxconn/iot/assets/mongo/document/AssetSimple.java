@@ -3,25 +3,35 @@ package com.foxconn.iot.assets.mongo.document;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AssetSimple {
 	
 	@JsonFormat(shape = Shape.STRING)
 	private Long id;
 	
+	@ApiModelProperty(value = "管制編號")
 	private String gzhNum;
 	
+	@ApiModelProperty(value = "財產編號")
 	private String cchNum;
 	
+	@ApiModelProperty(value = "設備名稱")
 	private String shbName;
 	
+	@ApiModelProperty(value = "設備品牌")
 	private String shbBrand;
 	
+	@ApiModelProperty(value = "設備規格")
 	private String shbSpec;
 	
+	@ApiModelProperty(value = "樓棟")
 	private String building;
 
+	@ApiModelProperty(value = "樓層")
 	private String floor;
 
+	@ApiModelProperty(value = "線體")
 	private String xianti;
 
 	public Long getId() {

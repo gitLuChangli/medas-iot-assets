@@ -9,23 +9,23 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class WorkOrderItem {
 	
-	@ApiModelProperty(value = "资产信息")
+	@ApiModelProperty(value = "資產信息")
 	private AssetSimple asset;
 	
-	@ApiModelProperty(value = "盘点状态")
-	private int statue;
+	@ApiModelProperty(value = "盤點狀態")
+	private int status;
 	
-	@ApiModelProperty(value = "盘点人工号")
+	@ApiModelProperty(value = "盤點人工號")
 	private String username;
 	
-	@ApiModelProperty(value = "盘点人姓名")
+	@ApiModelProperty(value = "盤點人姓名")
 	private String nickname;
 	
-	@ApiModelProperty(value = "完成时间")
-	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "GTM+8")
+	@ApiModelProperty(value = "盤點時間")
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date completeTime;
 	
-	@ApiModelProperty(value = "备注")
+	@ApiModelProperty(value = "備註")
 	private String note;
 
 	public AssetSimple getAsset() {
@@ -36,12 +36,12 @@ public class WorkOrderItem {
 		this.asset = asset;
 	}
 
-	public int getStatue() {
-		return statue;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setStatue(int statue) {
-		this.statue = statue;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public String getUsername() {
