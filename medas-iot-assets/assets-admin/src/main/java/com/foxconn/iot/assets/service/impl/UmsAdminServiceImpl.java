@@ -26,11 +26,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.foxconn.iot.assets.bo.AdminUserDetails;
 import com.foxconn.iot.assets.common.api.Snowflaker;
+import com.foxconn.iot.assets.common.api.VerificationCode;
 import com.foxconn.iot.assets.dao.UmsAdminCompanyDao;
 import com.foxconn.iot.assets.dao.UmsAdminPermissionRelationDao;
 import com.foxconn.iot.assets.dao.UmsAdminRoleRelationDao;
 import com.foxconn.iot.assets.dao.UmsCompanyRelationDao;
 import com.foxconn.iot.assets.dto.UmsAdminDto;
+import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.mapper.UmsAdminLoginLogMapper;
@@ -131,7 +133,12 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		try {
 			UserDetails userDetails = loadUserByUsername(username);
 			if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-				throw new BadCredentialsException("密码不正确");
+				int times = adminCacheService.getUsernameLockedTimes(username);
+				adminCacheService.lockUsername(username, times + 1);
+				if (times > 5) {
+					adminCacheService.setVerifyCode(username, VerificationCode.getCode(4));
+				}
+				throw new BadCredentialsException("密碼不正確");
 			}
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
 					null, userDetails.getAuthorities());
@@ -139,6 +146,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 			token = jwtTokenUtil.generateToken(userDetails);
 			updateLoginTimeByUsername(username);
 			insertLoginLog(username);
+			adminCacheService.unlockUsername(username);
 		} catch (AuthenticationException e) {
 			LOGGER.warn("登录异常:{}", e.getMessage());
 		}
@@ -409,5 +417,31 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		UmsAdminExample example = new UmsAdminExample();
 		example.createCriteria().andCompanyIdEqualTo(companyId);
 		return adminMapper.selectByExample(example);
+	}
+	
+	@Override
+	public boolean checkVerifyCode(UmsAdminLoginParam admin) {
+		int times = adminCacheService.getUsernameLockedTimes(admin.getUsername());
+		if (times < 5) {
+			return true;
+		}
+		if (StringUtils.isEmpty(admin.getVerifyCode())) {
+			return false;
+		}
+		String verifyCode = adminCacheService.getVerifyCode(admin.getUsername());
+		if (StringUtils.isEmpty(verifyCode)) {
+			return false;
+		}
+		return verifyCode.equals(admin.getVerifyCode());
+	}
+	
+	@Override
+	public String getVerifyCode(String username) {
+		return adminCacheService.getVerifyCode(username);
+	}
+	
+	@Override
+	public void setVerifyCode(String username, String verifyCode) {
+		adminCacheService.setVerifyCode(username, verifyCode);
 	}
 }

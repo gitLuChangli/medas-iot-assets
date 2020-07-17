@@ -7,7 +7,7 @@ public class RedisKeyProperties {
 	
 	private String admin;
 	
-	private String resourceList;
+	private String resources;
 
 	public String getAdmin() {
 		return admin;
@@ -17,11 +17,11 @@ public class RedisKeyProperties {
 		this.admin = admin;
 	}
 
-	public String getResourceList() {
-		return resourceList;
+	public String getResources() {
+		return resources;
 	}
 
-	public void setResourceList(String resourceList) {
-		this.resourceList = resourceList;
+	public void setResources(String resources) {
+		this.resources = resources;
 	}
 }

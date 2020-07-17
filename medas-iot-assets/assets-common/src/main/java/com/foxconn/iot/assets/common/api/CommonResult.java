@@ -98,6 +98,10 @@ public class CommonResult<T> {
         return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
     }
 
+    public static <T> CommonResult<T> verifyCodeError() {
+    	return new CommonResult<>(ResultCode.VERIFY_CODE_ERROR.getCode(), ResultCode.VERIFY_CODE_ERROR.getMessage(), null);
+    }
+    
     public long getCode() {
         return code;
     }

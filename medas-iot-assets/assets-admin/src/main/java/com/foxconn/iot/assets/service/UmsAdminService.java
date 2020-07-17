@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.foxconn.iot.assets.dto.UmsAdminDto;
+import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
@@ -112,4 +113,19 @@ public interface UmsAdminService {
     int resetPassword(Long id);
     
     List<UmsAdmin> queryByCompany(Long companyId);
+    
+    /**
+     * 檢驗驗證碼
+     */
+    boolean checkVerifyCode(UmsAdminLoginParam admin);
+    
+    /**
+     * 获取驗證碼 
+     */
+    String getVerifyCode(String username);
+    
+    /**
+     * 設置驗證碼
+     */
+    void setVerifyCode(String username, String verifyCode);
 }

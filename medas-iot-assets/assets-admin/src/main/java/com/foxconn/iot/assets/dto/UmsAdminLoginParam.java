@@ -5,17 +5,20 @@ import javax.validation.constraints.NotEmpty;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 用户登录参数
+ * 用戶登錄參數
  */
 public class UmsAdminLoginParam {
 	
-	@ApiModelProperty(value = "用户名", required = true)
-	@NotEmpty(message = "用户名不能为空")
+	@ApiModelProperty(value = "用戶名", required = true)
+	@NotEmpty(message = "用戶名不能為空")
 	private String username;
 	
-	@ApiModelProperty(value = "密码", required = true)
-	@NotEmpty(message = "密码不能为空")
+	@ApiModelProperty(value = "密碼", required = true)
+	@NotEmpty(message = "密碼不能為空")
 	private String password;
+	
+	@ApiModelProperty(value = "驗證碼")
+	private String verifyCode;
 
 	public String getUsername() {
 		return username;
@@ -33,4 +36,11 @@ public class UmsAdminLoginParam {
 		this.password = password;
 	}
 
+	public String getVerifyCode() {
+		return verifyCode;
+	}
+
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
+	}
 }

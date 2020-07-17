@@ -38,7 +38,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     private Long REDIS_EXPIRE;
     @Value("${redis.key.admin}")
     private String REDIS_KEY_ADMIN;
-    @Value("${redis.key.resourceList}")
+    @Value("${redis.key.resources}")
     private String REDIS_KEY_RESOURCE_LIST;
 
     @Override
@@ -114,4 +114,42 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + adminId;
         redisService.set(key, resourceList, REDIS_EXPIRE);
     }
+
+	@Override
+	public void setVerifyCode(String username, String verify) {
+		String key = REDIS_DATABASE + ":VC:" + username;
+		redisService.set(key, verify, 3000);
+	}
+
+	@Override
+	public String getVerifyCode(String username) {
+		String key = REDIS_DATABASE + ":VC:" + username;
+		return (String) redisService.get(key);
+	}
+	
+	@Override
+	public void deleteVerifyCode(String username) {
+		String key = REDIS_DATABASE + ":VC:" + username;
+		redisService.del(key);
+	}
+	
+	@Override
+	public void lockUsername(String username, int times) {
+		String key = REDIS_DATABASE + ":LOCK:" + username;
+		redisService.set(key, times, 60 * 60 * 2);
+	}
+	
+	@Override
+	public int getUsernameLockedTimes(String username) {
+		String key = REDIS_DATABASE + ":LOCK:" + username;
+		Object object = redisService.get(key);
+		if (object == null) return 0;
+		return (Integer) object;
+	}
+	
+	@Override
+	public void unlockUsername(String username) {
+		String key = REDIS_DATABASE + ":LOCK:" + username;
+		redisService.del(key);
+	}
 }

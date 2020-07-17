@@ -53,4 +53,34 @@ public interface UmsAdminCacheService {
      * 设置后台后台用户资源列表
      */
     void setResourceList(Long adminId, List<UmsResource> resourceList);
+    
+    /**
+     * 设置验证码
+     * */
+    void setVerifyCode(String username, String verify);
+    
+    /**
+     * 获取验证码
+     */
+    String getVerifyCode(String username);
+    
+    /**
+     * 删除验证码
+     */
+    void deleteVerifyCode(String username);
+    
+    /**
+     * 锁定用户名
+     */
+    void lockUsername(String username, int times);
+    
+    /**
+     * 查看用户锁定次数 
+     */
+    int getUsernameLockedTimes(String username);
+    
+    /**
+     * 解锁用户名 
+     */
+    void unlockUsername(String username);
 }
