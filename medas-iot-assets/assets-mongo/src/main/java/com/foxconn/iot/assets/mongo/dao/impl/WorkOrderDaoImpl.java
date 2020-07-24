@@ -210,4 +210,18 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 		}
 		return mongoTemplate.count(query, WorkOrder.class);
 	}
+
+	@Override
+	public long inventory(Long id, Long assetId, String username, String nickname, String completeTime, String note) {
+		Update update = new Update();
+		update.set("items.$.status", 1);
+		update.set("items.$.username", username);
+		update.set("items.$.nickname", nickname);
+		update.set("items.$.completeTime", completeTime);
+		update.set("items.$.note", note);
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(id)).addCriteria(Criteria.where("items.asset.id").is(assetId));
+		UpdateResult result = mongoTemplate.updateFirst(query, update, WorkOrder.class);
+		return result.getModifiedCount();
+	}
 }

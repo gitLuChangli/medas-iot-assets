@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.mongo.dao.AssetsDao;
 import com.foxconn.iot.assets.mongo.dao.WorkOrderDao;
+import com.foxconn.iot.assets.mongo.dao.dto.AssetHistoryItem;
 import com.foxconn.iot.assets.mongo.document.Asset;
 import com.foxconn.iot.assets.mongo.document.AssetSimple;
 import com.foxconn.iot.assets.mongo.document.WorkOrder;
@@ -21,7 +22,7 @@ import com.foxconn.iot.assets.mongo.service.WorkOrderService;
 
 @Service
 public class WorkOrderServiceImpl implements WorkOrderService {
-	
+
 	@Autowired
 	private WorkOrderDao workOrderDao;
 	@Autowired
@@ -72,5 +73,18 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	@Override
 	public Page<WorkOrder> queryByUsername(String username, String start, String end, Pageable pageable) {
 		return workOrderDao.queryByUsername(username, start, end, pageable);
+	}
+
+	@Override
+	public long syncHistory(ArrayList<AssetHistoryItem> items) {
+		long count = 0;
+		for (AssetHistoryItem assetHistoryItem : items) {
+			if (workOrderDao.inventory(assetHistoryItem.getWorkId(), assetHistoryItem.getAssetId(),
+					assetHistoryItem.getUsername(), assetHistoryItem.getNickname(), assetHistoryItem.getCompleteTime(),
+					assetHistoryItem.getNote()) > 0) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

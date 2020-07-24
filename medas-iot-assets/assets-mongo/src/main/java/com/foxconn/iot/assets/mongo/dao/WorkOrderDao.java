@@ -24,4 +24,6 @@ public interface WorkOrderDao {
 	Page<WorkOrder> queryByUsername(String username, String start, String end, Pageable pageable);
 	
 	long countByUsername(String username, String start, String end);
+	
+	long inventory(Long id,  Long assetId, String username, String nickname, String completeTime, String note);
 }

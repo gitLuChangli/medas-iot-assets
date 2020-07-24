@@ -1,5 +1,6 @@
 package com.foxconn.iot.assets.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foxconn.iot.assets.common.api.CommonPage;
 import com.foxconn.iot.assets.common.api.CommonResult;
+import com.foxconn.iot.assets.mongo.dao.dto.AssetHistoryItem;
 import com.foxconn.iot.assets.mongo.document.WorkOrder;
 import com.foxconn.iot.assets.mongo.service.WorkOrderService;
 
@@ -82,5 +86,16 @@ public class AssetInventoryController {
 								@PageableDefault Pageable pageable) {
 		Page<WorkOrder> wos = workOrderService.queryByUsername(username, start, end, pageable);
 		return CommonResult.success(CommonPage.restPage(wos));
+	}
+	
+	@ApiOperation(value = "同步盤點日誌")
+	@PostMapping(value = "/sync/history")
+	public CommonResult<?> syncHistory(@RequestBody ArrayList<AssetHistoryItem> items) {
+		long count = workOrderService.syncHistory(items);
+		if (count > 0) {
+			return CommonResult.success(null);
+		} else {
+			return CommonResult.failed();
+		}
 	}
 }
