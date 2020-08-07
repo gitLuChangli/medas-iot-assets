@@ -43,4 +43,9 @@ public interface UmsMenuService {
      * 修改菜单显示状态
      */
     int updateHidden(Long id, Integer hidden);
+    
+    /**
+     * 列出用户拥有的菜单 
+     */
+    List<UmsMenuNode> treeList(String username);
 }

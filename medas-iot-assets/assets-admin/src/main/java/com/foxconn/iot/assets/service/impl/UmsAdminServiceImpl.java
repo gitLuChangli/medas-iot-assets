@@ -28,6 +28,7 @@ import com.foxconn.iot.assets.bo.AdminUserDetails;
 import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.common.api.VerificationCode;
 import com.foxconn.iot.assets.dao.UmsAdminCompanyDao;
+import com.foxconn.iot.assets.dao.UmsAdminDao;
 import com.foxconn.iot.assets.dao.UmsAdminPermissionRelationDao;
 import com.foxconn.iot.assets.dao.UmsAdminRoleRelationDao;
 import com.foxconn.iot.assets.dao.UmsCompanyRelationDao;
@@ -47,6 +48,7 @@ import com.foxconn.iot.assets.model.UmsAdminPermissionRelation;
 import com.foxconn.iot.assets.model.UmsAdminPermissionRelationExample;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelation;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelationExample;
+import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.model.UmsCompany;
 import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
@@ -89,6 +91,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	private UmsCompanyRelationDao companyRelationDao;
 	@Autowired
 	private UmsCompanyMapper companyMapper;
+	@Autowired
+	private UmsAdminDao adminDao;
 
 	@Override
 	public UmsAdmin getAdminByUsername(String username) {
@@ -443,5 +447,10 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	@Override
 	public void setVerifyCode(String username, String verifyCode) {
 		adminCacheService.setVerifyCode(username, verifyCode);
+	}
+
+	@Override
+	public UmsAdminVo queryInfo(String username) {
+		return adminDao.queryInfo(username);
 	}
 }

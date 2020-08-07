@@ -16,4 +16,6 @@ public interface AssetsDao {
 	long count(Long companyId);	
 	
 	List<Asset> query(Long companyId, List<Long> ids);
+	
+	long update(long assetId, String building, String floor, String XT);
 }

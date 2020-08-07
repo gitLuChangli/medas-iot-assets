@@ -159,7 +159,11 @@ public class UmsAdminController {
     @RequestMapping(value = "/role/{adminId}", method = RequestMethod.GET)
     public CommonResult<List<UmsRole>> getRoleList(@PathVariable Long adminId) {
         List<UmsRole> roleList = adminService.getRoleList(adminId);
-        return CommonResult.success(roleList);
+        if (roleList.size() > 0 && roleList.get(0) != null) {
+        	return CommonResult.success(roleList);
+        } else {
+        	return CommonResult.success(null);
+        }
     }
 
     @ApiOperation("给用户分配+-权限")

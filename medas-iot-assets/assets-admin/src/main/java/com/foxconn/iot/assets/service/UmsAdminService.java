@@ -8,6 +8,7 @@ import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
+import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
@@ -128,4 +129,9 @@ public interface UmsAdminService {
      * 設置驗證碼
      */
     void setVerifyCode(String username, String verifyCode);
+    
+    /**
+     * 查看用户基本信息 
+     */
+    UmsAdminVo queryInfo(String username);
 }

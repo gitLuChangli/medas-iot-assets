@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.foxconn.iot.assets.dao.UmsAdminDao;
 import com.foxconn.iot.assets.dto.UmsMenuNode;
 import com.foxconn.iot.assets.mapper.UmsMenuMapper;
 import com.foxconn.iot.assets.model.UmsMenu;
@@ -22,6 +23,8 @@ import com.github.pagehelper.PageHelper;
 public class UmsMenuServiceImpl implements UmsMenuService {
 	@Autowired
 	private UmsMenuMapper menuMapper;
+	@Autowired
+	private UmsAdminDao adminDao;
 
 	@Override
 	public int create(UmsMenu umsMenu) {
@@ -100,5 +103,16 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 				.map(subMenu -> covertMenuNode(subMenu, menuList)).collect(Collectors.toList());
 		node.setChildren(children);
 		return node;
+	}
+
+	@Override
+	public List<UmsMenuNode> treeList(String username) {
+		List<UmsMenu> menuList = adminDao.queryByUsername(username);
+		if (menuList.size() > 0 && menuList.get(0) != null) {
+			List<UmsMenuNode> result = menuList.stream().filter(menu -> menu.getParentId().equals(0L))
+					.map(menu -> covertMenuNode(menu, menuList)).collect(Collectors.toList());
+			return result;
+		}
+		return null;
 	}
 }

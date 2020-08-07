@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foxconn.iot.assets.dao.UmsAdminDao">
+	<select id="queryByUsername"
+		resultMap="com.foxconn.iot.assets.mapper.UmsMenuMapper.BaseResultMap">
+		select d.* from ums_admin a left join
+		ums_admin_role_relation b on a.id = b.admin_id left join
+		ums_role_menu_relation c on b.role_id = c.role_id left join ums_menu d
+		on c.menu_id = d.id where a.username = #{username} order by d.sort asc
+	</select>
+	
+	<select id="queryCompanyRelation" resultType="java.lang.Long">
+		SELECT		
+		b.ancestor 
+		FROM ums_admin a 
+		LEFT JOIN ums_company_relation b 
+		ON a.company_id = b.descendant
+		WHERE a.id=#{userid} 
+		ORDER BY b.depth desc
+	</select>
+	
+	<select id="queryInfo" resultType="com.foxconn.iot.assets.model.UmsAdminVo">
+		select 
+		a.id id, 
+		a.username username, 
+		a.nickname nickname, 
+		a.icon icon, 
+		a.email email, 
+		a.ext ext, 
+		a.phone phone, 
+		a.openid openid, 
+		a.company_id companyId, 
+		a.note note,
+		a.create_time createTime,
+		a.status status,
+		b.name companyName 
+		from ums_admin a 
+		left join ums_company b 
+		on a.company_id = b.id 
+		where a.username=#{username}
+	</select>
+	
+</mapper>

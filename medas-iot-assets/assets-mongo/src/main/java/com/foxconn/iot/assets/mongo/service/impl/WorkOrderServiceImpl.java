@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.foxconn.iot.assets.common.api.Snowflaker;
+import com.foxconn.iot.assets.common.api.WorkOrderNum;
 import com.foxconn.iot.assets.mongo.dao.AssetsDao;
 import com.foxconn.iot.assets.mongo.dao.WorkOrderDao;
 import com.foxconn.iot.assets.mongo.dao.dto.AssetHistoryItem;
@@ -41,6 +42,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 			items.add(item);
 		}
 		workOrder.setId(Snowflaker.getId());
+		workOrder.setNum(WorkOrderNum.getNum());
 		workOrder.setCompanyId(companyId);
 		workOrder.setCount(items.size());
 		workOrder.setCounted(0);
@@ -78,12 +80,32 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	@Override
 	public long syncHistory(ArrayList<AssetHistoryItem> items) {
 		long count = 0;
+		List<Long> workIds = new ArrayList<>();
 		for (AssetHistoryItem assetHistoryItem : items) {
-			if (workOrderDao.inventory(assetHistoryItem.getWorkId(), assetHistoryItem.getAssetId(),
-					assetHistoryItem.getUsername(), assetHistoryItem.getNickname(), assetHistoryItem.getCompleteTime(),
-					assetHistoryItem.getNote()) > 0) {
-				count++;
+			if (workIds.indexOf(assetHistoryItem.getWorkId()) == -1) {
+				workIds.add(assetHistoryItem.getWorkId());
 			}
+			
+			workOrderDao.inventory(
+					assetHistoryItem.getWorkId(),
+					assetHistoryItem.getAssetId(),
+					assetHistoryItem.getUsername(), 
+					assetHistoryItem.getNickname(), 
+					assetHistoryItem.getCompleteTime(),
+					assetHistoryItem.getNote(), 
+					assetHistoryItem.getBuilding(), 
+					assetHistoryItem.getFloor(), 
+					assetHistoryItem.getXianti());
+			
+			assetsDao.update(
+					assetHistoryItem.getAssetId(), 
+					assetHistoryItem.getBuilding(), 
+					assetHistoryItem.getFloor(), 
+					assetHistoryItem.getXianti());
+		}
+		
+		for (long id : workIds) {
+			count = workOrderDao.updateCounted(id);
 		}
 		return count;
 	}

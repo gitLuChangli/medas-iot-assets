@@ -1,12 +1,15 @@
 package com.foxconn.iot.assets.mongo.document;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @Document(collection = "assets")
+@CompoundIndexes({ @CompoundIndex(name = "company_GZ", def = "{'companyId': 1, 'gzhNum': 1}", unique = true) })
 public class Asset {
 
 	@Id

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,12 +14,15 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import io.swagger.annotations.ApiModelProperty;
 
 @Document(collection = "work_order")
+@CompoundIndexes({ @CompoundIndex(name = "work_order_num", def = "{'num': 1}", unique = true) })
 public class WorkOrder {
 	
-	@ApiModelProperty(value = "工單號")
 	@Id
 	@JsonFormat(shape = Shape.STRING)
 	private Long id;
+	
+	@ApiModelProperty(value = "工單號")
+	private String num;
 
 	@ApiModelProperty(value = "部門編號")
 	@JsonFormat(shape = Shape.STRING)
@@ -55,6 +60,14 @@ public class WorkOrder {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
 	}
 
 	public Long getCompanyId() {

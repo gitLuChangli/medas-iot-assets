@@ -1,10 +1,5 @@
 package com.foxconn.iot.assets.mongo.document;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-
 import io.swagger.annotations.ApiModelProperty;
 
 public class WorkOrderItem {
@@ -22,12 +17,20 @@ public class WorkOrderItem {
 	private String nickname;
 	
 	@ApiModelProperty(value = "盤點時間")
-	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date completeTime;
+	private String completeTime;
 	
 	@ApiModelProperty(value = "備註")
 	private String note;
 
+	@ApiModelProperty(value = "樓棟")
+	private String building;
+	
+	@ApiModelProperty(value = "樓層")
+	private String floor;
+	
+	@ApiModelProperty(value = "線體")
+	private String xianti;
+	
 	public AssetSimple getAsset() {
 		return asset;
 	}
@@ -60,11 +63,11 @@ public class WorkOrderItem {
 		this.nickname = nickname;
 	}
 
-	public Date getCompleteTime() {
+	public String getCompleteTime() {
 		return completeTime;
 	}
 
-	public void setCompleteTime(Date completeTime) {
+	public void setCompleteTime(String completeTime) {
 		this.completeTime = completeTime;
 	}
 
@@ -74,5 +77,29 @@ public class WorkOrderItem {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(String building) {
+		this.building = building;
+	}
+
+	public String getFloor() {
+		return floor;
+	}
+
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+
+	public String getXianti() {
+		return xianti;
+	}
+
+	public void setXianti(String xianti) {
+		this.xianti = xianti;
 	}
 }

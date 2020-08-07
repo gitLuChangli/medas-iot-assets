@@ -211,42 +211,75 @@ CREATE TABLE `ums_company_relation` (
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='部门关系表';
 
 -- ----------------------------
--- Table structure for aims_assets
+-- Table structure for tb_module
 -- ----------------------------
-
-DROP TABLE IF EXISTS `aims_assets`;
-CREATE TABLE `aims_assets` (
+DROP TABLE IF EXISTS `tb_module`;
+CREATE TABLE `tb_module`(
 	`id` bigint(20) not null,
-    `company_id` bigint(20) not null comment '部門編號',
-    `gzh_num` varchar(64) not null comment '管制編號',
-    `cch_num` varchar(64) not null comment '財產編號',
-    `shb_name` varchar(200) default null comment '設備名稱',
-    `shb_brand` varchar(200) default null comment '設備品牌',
-    `shb_spec` varchar(200) default null comment '設備參數',
-    `fy_type` varchar(64) default null comment '費用類型',
-    `unit` varchar(64) default null comment '單位',
-    `price` varchar(64) default null comment '單價',
-    `chsh_code` varchar(64) default null comment '廠商代碼',
-    `chsh_name` varchar(200) default null comment '廠商名稱',
-    `xq_department` varchar(200) default null comment '需求部門',
-    `she_area` varchar(200) default null comment '設備面積',
-    `shb_weight` varchar(200) default null comment '設備重量',
-    `shb_sn` varchar(64) default null comment '設備銘牌SN',
-    `project` varchar(200) default null comment '所在專案',
-    `segment` varchar(64) default null comment '專案段別',
-    `gzh_name` varchar(200) default null comment '工站名稱',
-    `shb_status` varchar(64) default null comment '設備狀態',
-    `building` varchar(64) default null comment '樓棟',
-    `floor` varchar(64) default null comment '樓層',
-    `xianti` varchar(64) default null comment '線體',
-    `po_num` varchar(64) default null comment 'PO單號',
-    `ly_emp` varchar(64) default null comment '領用工號',
-    `ly_emp_name` varchar(64) default null comment '領用姓名',
-    `dh_time` varchar(64) default null comment '到貨時間',
-    `jy_time` varchar(64) default null comment '校驗時間',
-    `yj_cycle` varchar(64) default null comment '校驗週期',
-    `note` varchar(200) default null comment '備註',
-    primary key(`id`),
-    unique key (`company_id`, `gzh_num`, `cch_num`)    
-) ENGINE=InnoDB CHARSET=utf8 COMMENT='固定資產表';
+    `name` varchar(200) not null comment '模块名称',
+    `note` varchar(200) default null comment '模块说明',
+    `status` int(1) default 0 comment '模块状态',
+    primary key (`id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块表';
+
+-- ----------------------------
+-- Table structure for tb_module_company
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_module_company`;
+CREATE TABLE `tb_module_company` (
+	`id` bigint(20) not null,    
+    `module_id` bigint(20) not null comment '模块id',    
+    `company_id` bigint(20) not null comment '部门id',
+    primary key (`id`),
+    unique key (`module_id`, `company_id`) comment '模块部门唯一约束'
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块部门关系表';
+
+-- ----------------------------
+-- Table structure for tb_module_user
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_module_user`;
+CREATE TABLE `tb_module_user` (
+	`id` bigint(20) not null,    
+    `module_id` bigint(20) not null comment '模块id',    
+    `user_id` bigint(20) not null comment '用户id',
+    `admin` int(1) default 0 comment '模块管理员',
+    primary key (`id`),
+    unique key (`module_id`, `user_id`) comment '模块用户唯一约束'
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块用户关系表';
+
+-- ----------------------------
+-- Table structure for tb_module_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_module_menu`;
+CREATE TABLE `tb_module_menu`(
+	`id` bigint(20) not null,
+    `module_id` bigint(20) not null comment '模块ID',
+    `parent_id` bigint(20) DEFAULT NULL COMMENT '父级ID',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `title` varchar(100) DEFAULT NULL COMMENT '菜单名称',
+    `level` int(4) DEFAULT NULL COMMENT '菜单级数',
+    `sort` int(4) DEFAULT NULL COMMENT '菜单排序',
+    `name` varchar(100) DEFAULT NULL COMMENT '前端名称',
+    `icon` varchar(200) DEFAULT NULL COMMENT '前端图标',
+    `hidden` int(1) DEFAULT NULL COMMENT '前端隐藏',
+    `admin_only` int(1) default 0 comment '管理员菜单',
+    PRIMARY KEY (`id`),
+    unique key (`parent_id`, `title`, `module_id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块菜单表';
+
+-- ----------------------------
+-- Table structure for tb_module_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_module_resource`;
+CREATE TABLE `tb_module_resource` (
+  `id` bigint(20) NOT NULL,
+  `module_id` bigint(20) NOT NULL COMMENT '模块ID',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `name` varchar(200) DEFAULT NULL COMMENT '资源名称',
+  `url` varchar(200) DEFAULT NULL COMMENT '资源URL',
+  `description` varchar(500) DEFAULT NULL COMMENT '描述',
+  `admin_only` int(1) default 0 comment '管理员资源',
+  PRIMARY KEY (`id`),
+  unique key (`name`, `app_id`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块资源表';
 

@@ -2,7 +2,9 @@ package com.foxconn.iot.assets.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,13 +24,16 @@ import com.alibaba.druid.util.StringUtils;
 import com.foxconn.iot.assets.common.api.CommonResult;
 import com.foxconn.iot.assets.common.api.VerificationCode;
 import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
+import com.foxconn.iot.assets.dto.UmsMenuNode;
+import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.service.UmsAdminService;
+import com.foxconn.iot.assets.service.UmsMenuService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(tags = { "登錄模塊" }, value = "LoginController")
+@Api(tags = { "登录模块" }, value = "LoginController")
 public class LoginController {
 
 	@Value("${jwt.tokenHeader}")
@@ -39,8 +44,10 @@ public class LoginController {
 
 	@Autowired
 	private UmsAdminService adminService;
+	@Autowired
+	private UmsMenuService menuService;
 
-	@ApiOperation(value = "獲取驗證碼")
+	@ApiOperation(value = "获取验证码")
 	@GetMapping("/vcode")
 	public void verifyCode(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(value = "username", required = true) String username) throws IOException {		
@@ -53,7 +60,7 @@ public class LoginController {
 		VerificationCode.output(image, response.getOutputStream());
 	}
 
-	@ApiOperation(value = "登錄")
+	@ApiOperation(value = "登录")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public CommonResult<?> login(@RequestBody UmsAdminLoginParam umsAdminLoginParam, BindingResult result) {
 		if (!adminService.checkVerifyCode(umsAdminLoginParam)) {
@@ -87,5 +94,21 @@ public class LoginController {
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public CommonResult<?> logout() {
 		return CommonResult.success(null);
+	}
+	
+	@ApiOperation(value = "获取个人信息")
+	@RequestMapping(value = "/mine", method = RequestMethod.GET)
+	public CommonResult<?> mineInformation(Principal principal) {
+		String username = principal.getName();
+		UmsAdminVo admin = adminService.queryInfo(username);		
+        return CommonResult.success(admin);
+	}
+	
+	@ApiOperation(value = "获取个人菜单")
+	@GetMapping(value = "/mine/menus")
+	public CommonResult<?> mineMenus(Principal principal) {
+		String username = principal.getName();
+		List<UmsMenuNode> menus = menuService.treeList(username);
+		return CommonResult.success(menus);
 	}
 }

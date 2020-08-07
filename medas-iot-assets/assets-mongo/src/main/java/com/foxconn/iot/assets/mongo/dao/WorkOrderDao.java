@@ -25,5 +25,7 @@ public interface WorkOrderDao {
 	
 	long countByUsername(String username, String start, String end);
 	
-	long inventory(Long id,  Long assetId, String username, String nickname, String completeTime, String note);
+	long inventory(Long id,  Long assetId, String username, String nickname, String completeTime, String note, String building, String floor, String XT);
+	
+	long updateCounted(Long id);
 }

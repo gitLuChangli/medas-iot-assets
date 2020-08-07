@@ -22,6 +22,15 @@ public class AssetHistoryItem {
 	@ApiModelProperty(value = "備註")
 	private String note;
 
+	@ApiModelProperty(value = "樓棟")
+	private String building;
+	
+	@ApiModelProperty(value = "樓層")
+	private String floor;
+	
+	@ApiModelProperty(value = "線體")
+	private String xianti;
+	
 	public Long getWorkId() {
 		return workId;
 	}
@@ -68,5 +77,29 @@ public class AssetHistoryItem {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getBuilding() {
+		return building;
+	}
+
+	public void setBuilding(String building) {
+		this.building = building;
+	}
+
+	public String getFloor() {
+		return floor;
+	}
+
+	public void setFloor(String floor) {
+		this.floor = floor;
+	}
+
+	public String getXianti() {
+		return xianti;
+	}
+
+	public void setXianti(String xianti) {
+		this.xianti = xianti;
 	}
 }
