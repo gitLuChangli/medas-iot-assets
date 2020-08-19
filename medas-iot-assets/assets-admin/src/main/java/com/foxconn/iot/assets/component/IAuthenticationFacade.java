@@ -9,4 +9,6 @@ public interface IAuthenticationFacade {
 	Long getUserId();
 	
 	Long getCompanyId();
+	
+	String getUsername();
 }

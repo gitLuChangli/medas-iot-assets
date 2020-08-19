@@ -3,7 +3,6 @@ package com.foxconn.iot.assets.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,7 +28,6 @@ import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.common.api.VerificationCode;
 import com.foxconn.iot.assets.dao.UmsAdminCompanyDao;
 import com.foxconn.iot.assets.dao.UmsAdminDao;
-import com.foxconn.iot.assets.dao.UmsAdminPermissionRelationDao;
 import com.foxconn.iot.assets.dao.UmsAdminRoleRelationDao;
 import com.foxconn.iot.assets.dao.UmsCompanyRelationDao;
 import com.foxconn.iot.assets.dto.UmsAdminDto;
@@ -37,20 +35,16 @@ import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.mapper.UmsAdminLoginLogMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminMapper;
-import com.foxconn.iot.assets.mapper.UmsAdminPermissionRelationMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminRoleRelationMapper;
 import com.foxconn.iot.assets.mapper.UmsCompanyMapper;
 import com.foxconn.iot.assets.model.UmsAdmin;
 import com.foxconn.iot.assets.model.UmsAdminExample;
 import com.foxconn.iot.assets.model.UmsAdminLoginLog;
 import com.foxconn.iot.assets.model.UmsAdminLoginLogExample;
-import com.foxconn.iot.assets.model.UmsAdminPermissionRelation;
-import com.foxconn.iot.assets.model.UmsAdminPermissionRelationExample;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelation;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelationExample;
 import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.model.UmsCompany;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
 import com.foxconn.iot.assets.security.util.JwtTokenUtil;
@@ -81,10 +75,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	private UmsAdminRoleRelationMapper adminRoleRelationMapper;
 	@Autowired
 	private UmsAdminRoleRelationDao adminRoleRelationDao;
-	@Autowired
-	private UmsAdminPermissionRelationMapper adminPermissionRelationMapper;
-	@Autowired
-	private UmsAdminPermissionRelationDao adminPermissionRelationDao;
 	@Autowired
 	private UmsAdminLoginLogMapper loginLogMapper;
 	@Autowired
@@ -304,50 +294,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 			adminCacheService.setResourceList(adminId, resourceList);
 		}
 		return resourceList;
-	}
-
-	@Override
-	public int updatePermission(Long adminId, List<Long> permissionIds) {
-		// 删除原所有权限关系
-		UmsAdminPermissionRelationExample relationExample = new UmsAdminPermissionRelationExample();
-		relationExample.createCriteria().andAdminIdEqualTo(adminId);
-		adminPermissionRelationMapper.deleteByExample(relationExample);
-		// 获取用户所有角色权限
-		List<UmsPermission> permissionList = adminRoleRelationDao.getRolePermissionList(adminId);
-		List<Long> rolePermissionList = permissionList.stream().map(UmsPermission::getId).collect(Collectors.toList());
-		if (!CollectionUtils.isEmpty(permissionIds)) {
-			List<UmsAdminPermissionRelation> relationList = new ArrayList<>();
-			// 筛选出+权限
-			List<Long> addPermissionIdList = permissionIds.stream()
-					.filter(permissionId -> !rolePermissionList.contains(permissionId)).collect(Collectors.toList());
-			// 筛选出-权限
-			List<Long> subPermissionIdList = rolePermissionList.stream()
-					.filter(permissionId -> !permissionIds.contains(permissionId)).collect(Collectors.toList());
-			// 插入+-权限关系
-			relationList.addAll(convert(adminId, 1, addPermissionIdList));
-			relationList.addAll(convert(adminId, -1, subPermissionIdList));
-			return adminPermissionRelationDao.insertList(relationList);
-		}
-		return 0;
-	}
-
-	/**
-	 * 将+-权限关系转化为对象
-	 */
-	private List<UmsAdminPermissionRelation> convert(Long adminId, Integer type, List<Long> permissionIdList) {
-		List<UmsAdminPermissionRelation> relationList = permissionIdList.stream().map(permissionId -> {
-			UmsAdminPermissionRelation relation = new UmsAdminPermissionRelation();
-			relation.setAdminId(adminId);
-			relation.setType(type);
-			relation.setPermissionId(permissionId);
-			return relation;
-		}).collect(Collectors.toList());
-		return relationList;
-	}
-
-	@Override
-	public List<UmsPermission> getPermissionList(Long adminId) {
-		return adminRoleRelationDao.getPermissionList(adminId);
 	}
 
 	@Override

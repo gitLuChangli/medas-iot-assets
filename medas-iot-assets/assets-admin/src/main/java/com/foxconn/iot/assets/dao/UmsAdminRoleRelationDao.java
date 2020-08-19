@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.foxconn.iot.assets.model.UmsAdminRoleRelation;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
 
@@ -22,16 +21,6 @@ public interface UmsAdminRoleRelationDao {
      * 获取用于所有角色
      */
     List<UmsRole> getRoleList(@Param("adminId") Long adminId);
-
-    /**
-     * 获取用户所有角色权限
-     */
-    List<UmsPermission> getRolePermissionList(@Param("adminId") Long adminId);
-
-    /**
-     * 获取用户所有权限(包括+-权限)
-     */
-    List<UmsPermission> getPermissionList(@Param("adminId") Long adminId);
 
     /**
      * 获取用户所有可访问资源

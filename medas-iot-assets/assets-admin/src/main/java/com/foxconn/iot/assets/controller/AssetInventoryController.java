@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.excel.EasyExcel;
-import com.foxconn.iot.assets.bo.AdminUserDetails;
 import com.foxconn.iot.assets.common.api.CommonPage;
 import com.foxconn.iot.assets.common.api.CommonResult;
 import com.foxconn.iot.assets.component.IAuthenticationFacade;
@@ -65,10 +63,8 @@ public class AssetInventoryController {
 
 	@ApiOperation(value = "保存资产")
 	@PostMapping(value = "/api/admin2/asset/")
-	public CommonResult<?> save(@RequestBody List<Asset> assets) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return saveAssets(user.getCompanyId(), assets);
+	public CommonResult<?> save(@RequestBody List<Asset> assets) {		
+		return saveAssets(authenticationFacade.getCompanyId(), assets);
 	}
 
 	@ApiOperation(value = "系统管理员保存资产")
@@ -85,24 +81,22 @@ public class AssetInventoryController {
 	 * @param pageable
 	 * @return
 	 */
-	private CommonResult<?> queryAssets(Long companyId, Pageable pageable) {
-		Page<Asset> assets = assetInventoryService.queryAssets(companyId, pageable);
+	private CommonResult<?> queryAssets(Long companyId, Pageable pageable, String keyword) {
+		Page<Asset> assets = assetInventoryService.queryAssets(companyId, pageable, keyword);
 		return CommonResult.success(CommonPage.restPage(assets));
 	}
 
 	@ApiOperation(value = "查询固定资产")
 	@GetMapping(value = "/api/admin2/asset/")
-	public CommonResult<?> query(@PageableDefault Pageable pageable) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return queryAssets(user.getCompanyId(), pageable);
+	public CommonResult<?> query(@PageableDefault Pageable pageable, @RequestParam(value = "keyword", required = false) String keyword) {
+		return queryAssets(authenticationFacade.getCompanyId(), pageable, keyword);
 	}
 
 	@ApiOperation(value = "查询固定资产")
 	@GetMapping(value = "/api/admin/asset/")
 	public CommonResult<?> query(@RequestParam(value = "company", required = true) Long companyId,
-			@PageableDefault Pageable pageable) {
-		return queryAssets(companyId, pageable);
+			@PageableDefault Pageable pageable, @RequestParam(value = "keyword", required = false) String keyword) {
+		return queryAssets(companyId, pageable, keyword);
 	}
 
 	/**
@@ -120,9 +114,7 @@ public class AssetInventoryController {
 	@ApiOperation(value = "创建盘点工单")
 	@PostMapping(value = "/api/admin2/asset/inventory/")
 	public CommonResult<?> createInventory(@RequestParam(value = "assetIds") List<Long> assetIds) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return createWorkOrder(user.getCompanyId(), assetIds);
+		return createWorkOrder(authenticationFacade.getCompanyId(), assetIds);
 	}
 
 	@ApiOperation(value = "系统管理员创建盘点工单")
@@ -153,9 +145,7 @@ public class AssetInventoryController {
 	public CommonResult<?> query(@RequestParam(value = "start", required = false) String start,
 			@RequestParam(value = "end", required = false) String end,
 			@RequestParam(value = "keyword", required = false) String keyword, @PageableDefault Pageable pageable) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return queryWorkOrder(user.getCompanyId(), start, end, keyword, pageable);
+		return queryWorkOrder(authenticationFacade.getCompanyId(), start, end, keyword, pageable);
 	}
 
 	@ApiOperation(value = "系统管理员查询部门工单")
@@ -187,9 +177,7 @@ public class AssetInventoryController {
 	@PutMapping(value = "/api/admin2/asset/set/worker/{id:\\d+}")
 	public CommonResult<?> setWorkers(@PathVariable(value = "id") Long id,
 			@RequestParam(value = "usernames") List<String> usernames) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return setInventoryWorkers(user.getCompanyId(), id, usernames);
+		return setInventoryWorkers(authenticationFacade.getCompanyId(), id, usernames);
 	}
 
 	@ApiOperation(value = "系统管理员分配盘点人")
@@ -218,9 +206,7 @@ public class AssetInventoryController {
 	@ApiOperation(value = "结单")
 	@PutMapping(value = "/api/admin2/asset/complete/{id:\\d+}")
 	public CommonResult<?> complete(@PathVariable(value = "id") Long id, @RequestParam(value = "note") String note) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return completeWorkOrder(user.getCompanyId(), id, note);
+		return completeWorkOrder(authenticationFacade.getCompanyId(), id, note);
 	}
 
 	@ApiOperation(value = "系统管理员结单")
@@ -248,9 +234,7 @@ public class AssetInventoryController {
 	@ApiOperation(value = "删除工单")
 	@DeleteMapping(value = "/api/admin2/asset/work/{id:\\d+}")
 	public CommonResult<?> delete(@PathVariable(value = "id") Long id) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return deleteWorkOrder(user.getCompanyId(), id);
+		return deleteWorkOrder(authenticationFacade.getCompanyId(), id);
 	}
 
 	@ApiOperation(value = "系统管理员删除工单")
@@ -273,9 +257,7 @@ public class AssetInventoryController {
 	@GetMapping(value = "/api/user/asset/orders/")
 	public CommonResult<?> queryByUsername(@RequestParam(value = "start", required = false) String start,
 			@RequestParam(value = "end", required = false) String end, @PageableDefault Pageable pageable) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		Page<WorkOrder> wos = assetInventoryService.queryWorkOrdersByUsername(user.getUsername(), start, end, pageable);
+		Page<WorkOrder> wos = assetInventoryService.queryWorkOrdersByUsername(authenticationFacade.getUsername(), start, end, pageable);
 		return CommonResult.success(CommonPage.restPage(wos));
 	}
 
@@ -304,9 +286,7 @@ public class AssetInventoryController {
 	@ApiOperation(value = "查看所在部门的用户")
 	@GetMapping(value = "/api/admin2/company/users/")
 	public CommonResult<?> queryUsers() {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		return queryCompanyUsers(user.getCompanyId());
+		return queryCompanyUsers(authenticationFacade.getCompanyId());
 	}
 	
 	@ApiOperation(value = "查看所在部门的用户")

@@ -1,6 +1,5 @@
 package com.foxconn.iot.assets.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,20 +10,15 @@ import org.springframework.util.StringUtils;
 
 import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.dao.UmsRoleDao;
-import com.foxconn.iot.assets.dao.UmsRolePermissionRelationDao;
 import com.foxconn.iot.assets.mapper.UmsRoleMapper;
 import com.foxconn.iot.assets.mapper.UmsRoleMenuRelationMapper;
-import com.foxconn.iot.assets.mapper.UmsRolePermissionRelationMapper;
 import com.foxconn.iot.assets.mapper.UmsRoleResourceRelationMapper;
 import com.foxconn.iot.assets.model.UmsMenu;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
 import com.foxconn.iot.assets.model.UmsRoleExample;
 import com.foxconn.iot.assets.model.UmsRoleMenuRelation;
 import com.foxconn.iot.assets.model.UmsRoleMenuRelationExample;
-import com.foxconn.iot.assets.model.UmsRolePermissionRelation;
-import com.foxconn.iot.assets.model.UmsRolePermissionRelationExample;
 import com.foxconn.iot.assets.model.UmsRoleResourceRelation;
 import com.foxconn.iot.assets.model.UmsRoleResourceRelationExample;
 import com.foxconn.iot.assets.service.UmsAdminCacheService;
@@ -39,13 +33,9 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 	@Autowired
 	private UmsRoleMapper roleMapper;
 	@Autowired
-	private UmsRolePermissionRelationMapper rolePermissionRelationMapper;
-	@Autowired
 	private UmsRoleMenuRelationMapper roleMenuRelationMapper;
 	@Autowired
 	private UmsRoleResourceRelationMapper roleResourceRelationMapper;
-	@Autowired
-	private UmsRolePermissionRelationDao rolePermissionRelationDao;
 	@Autowired
 	private UmsRoleDao roleDao;
 	@Autowired
@@ -85,28 +75,6 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 		int count = roleMapper.deleteByExample(example);
 		adminCacheService.delResourceListByRoleIds(ids);
 		return count;
-	}
-
-	@Override
-	public List<UmsPermission> getPermissionList(Long roleId) {
-		return rolePermissionRelationDao.getPermissionList(roleId);
-	}
-
-	@Override
-	public int updatePermission(Long roleId, List<Long> permissionIds) {
-		// 先删除原有关系
-		UmsRolePermissionRelationExample example = new UmsRolePermissionRelationExample();
-		example.createCriteria().andRoleIdEqualTo(roleId);
-		rolePermissionRelationMapper.deleteByExample(example);
-		// 批量插入新关系
-		List<UmsRolePermissionRelation> relationList = new ArrayList<>();
-		for (Long permissionId : permissionIds) {
-			UmsRolePermissionRelation relation = new UmsRolePermissionRelation();
-			relation.setRoleId(roleId);
-			relation.setPermissionId(permissionId);
-			relationList.add(relation);
-		}
-		return rolePermissionRelationDao.insertList(relationList);
 	}
 
 	@Override

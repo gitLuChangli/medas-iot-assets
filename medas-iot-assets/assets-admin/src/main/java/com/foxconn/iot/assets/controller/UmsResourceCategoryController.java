@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 @Api(tags = "UmsResourceCategoryController", description = "后台资源分类管理")
-@RequestMapping("/resourceCategory")
+@RequestMapping("/api/admin/resource/category")
 public class UmsResourceCategoryController {
 	@Autowired
 	private UmsResourceCategoryService resourceCategoryService;

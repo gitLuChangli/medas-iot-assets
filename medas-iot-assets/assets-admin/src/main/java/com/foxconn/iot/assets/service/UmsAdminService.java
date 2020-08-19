@@ -11,7 +11,6 @@ import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
 import com.foxconn.iot.assets.model.UmsAdminLoginLog;
 import com.foxconn.iot.assets.model.UmsAdminVo;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
 
@@ -78,17 +77,6 @@ public interface UmsAdminService {
      * 获取指定用户的可访问资源
      */
     List<UmsResource> getResourceList(Long adminId);
-
-    /**
-     * 修改用户的+-权限
-     */
-    @Transactional
-    int updatePermission(Long adminId, List<Long> permissionIds);
-
-    /**
-     * 获取用户所有权限（包括角色权限和+-权限）
-     */
-    List<UmsPermission> getPermissionList(Long adminId);
 
     /**
      * 用户修改密码

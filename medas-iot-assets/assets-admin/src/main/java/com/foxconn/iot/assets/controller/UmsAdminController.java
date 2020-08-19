@@ -26,7 +26,6 @@ import com.foxconn.iot.assets.common.api.CommonResult;
 import com.foxconn.iot.assets.dto.UmsAdminDto;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsRole;
 import com.foxconn.iot.assets.service.UmsAdminService;
 import com.foxconn.iot.assets.service.UmsRoleService;
@@ -146,24 +145,6 @@ public class UmsAdminController {
         } else {
         	return CommonResult.success(null);
         }
-    }
-
-    @ApiOperation("给用户分配+-权限")
-    @RequestMapping(value = "/permission/update", method = RequestMethod.POST)
-    public CommonResult<?> updatePermission(@RequestParam Long adminId,
-                                         @RequestParam("permissionIds") List<Long> permissionIds) {
-        int count = adminService.updatePermission(adminId, permissionIds);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
-    }
-
-    @ApiOperation("获取用户所有权限（包括+-权限）")
-    @RequestMapping(value = "/permission/{adminId}", method = RequestMethod.GET)
-    public CommonResult<List<UmsPermission>> getPermissionList(@PathVariable Long adminId) {
-        List<UmsPermission> permissionList = adminService.getPermissionList(adminId);
-        return CommonResult.success(permissionList);
     }
     
     @ApiOperation(value = "創建用戶")

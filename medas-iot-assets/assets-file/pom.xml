@@ -24,4 +24,28 @@
 			<artifactId>fastjson</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.foxconn.iot.file.FileApplication</mainClass>
+					<outputDirectory>${project.basedir}</outputDirectory>
+					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

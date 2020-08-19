@@ -33,8 +33,8 @@ public class AssetInventoryServiceImpl implements AssetInventoryService {
 	}
 
 	@Override
-	public Page<Asset> queryAssets(Long companyId, Pageable pageable) {
-		return assetsService.query(companyId, pageable);
+	public Page<Asset> queryAssets(Long companyId, Pageable pageable, String keyword) {
+		return assetsService.query(companyId, pageable, keyword);
 	}
 
 	@Override

@@ -21,11 +21,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 后台菜单管理Controller
+ * 后台菜单接口Controller
  */
 @Controller
-@Api(tags = "UmsMenuController", description = "后台菜单管理")
-@RequestMapping("/menu")
+@Api(tags = "后台菜单接口", value = "UmsMenuController")
+@RequestMapping("/api/admin/menu")
 public class UmsMenuController {
 
     @Autowired

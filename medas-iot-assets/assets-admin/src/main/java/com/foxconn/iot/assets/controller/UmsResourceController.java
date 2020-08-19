@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 @Api(tags = "UmsResourceController", description = "后台资源管理")
-@RequestMapping("/resource")
+@RequestMapping("/api/admin/resource")
 public class UmsResourceController {
 
 	@Autowired

@@ -11,9 +11,9 @@ public interface AssetsDao {
 	
 	long save(List<Asset> assets);
 	
-	Page<Asset> query(Long companyId, Pageable pageable);
+	Page<Asset> query(Long companyId, Pageable pageable, String keyword);
 	
-	long count(Long companyId);	
+	long count(Long companyId, String keyword);	
 	
 	List<Asset> query(Long companyId, List<Long> ids);
 	

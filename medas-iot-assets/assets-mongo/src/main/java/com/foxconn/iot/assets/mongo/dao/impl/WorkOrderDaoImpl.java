@@ -68,7 +68,9 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 		}
 		if (!StringUtils.isEmpty(keyword)) {
 			Pattern pattern = Pattern.compile(String.format("^.*%s.*$", keyword), Pattern.CASE_INSENSITIVE);
-			query.addCriteria(Criteria.where("usernames").regex(pattern));
+			query.addCriteria(Criteria.where("").orOperator(
+					Criteria.where("usernames").regex(pattern),
+					Criteria.where("num").regex(pattern)));
 		}
 		query.with(pageable);
 		
@@ -109,7 +111,9 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 		}
 		if (!StringUtils.isEmpty(keyword)) {
 			Pattern pattern = Pattern.compile(String.format("^.*%s.*$", keyword), Pattern.CASE_INSENSITIVE);
-			query.addCriteria(Criteria.where("usernames").regex(pattern));
+			query.addCriteria(Criteria.where("").orOperator(
+					Criteria.where("usernames").regex(pattern),
+					Criteria.where("num").regex(pattern)));
 		}
 		return mongoTemplate.count(query, WorkOrder.class);
 	}

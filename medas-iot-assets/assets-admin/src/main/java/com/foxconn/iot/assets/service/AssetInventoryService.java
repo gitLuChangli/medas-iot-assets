@@ -27,9 +27,10 @@ public interface AssetInventoryService {
 	 * 
 	 * @param companyId
 	 * @param pageable
+	 * @param keyword
 	 * @return
 	 */
-	Page<Asset> queryAssets(Long companyId, Pageable pageable);
+	Page<Asset> queryAssets(Long companyId, Pageable pageable, String keyword);
 
 	/**
 	 * 创建盘点工单

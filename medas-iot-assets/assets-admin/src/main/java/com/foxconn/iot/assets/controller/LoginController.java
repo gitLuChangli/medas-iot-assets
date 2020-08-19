@@ -139,9 +139,7 @@ public class LoginController {
 	@ApiOperation(value = "修改个人信息")
 	@PutMapping(value = "/api/mine/information")
 	public CommonResult<?> modifyMyselfInformation(@RequestBody @JsonView(ModifyMyself.Information.class) ModifyMyself myself, BindingResult result) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		int status = adminService.updateInformation(user.getUserId(), myself.getEmail(), myself.getPhone(), myself.getExt());
+		int status = adminService.updateInformation(authenticationFacade.getCompanyId(), myself.getEmail(), myself.getPhone(), myself.getExt());
 		if (status > 0) return CommonResult.success(null);
 		else return CommonResult.failed();
 	}
@@ -150,9 +148,7 @@ public class LoginController {
 	@GetMapping(value = "/api/mine/operation")
 	public CommonResult<?> mineOperation(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
 			@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-		Authentication authentication = authenticationFacade.getAuthentication();
-		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
-		List<UmsAdminLoginLog> logs = adminService.listLoginLog(user.getUserId(), pageSize, pageNum);
+		List<UmsAdminLoginLog> logs = adminService.listLoginLog(authenticationFacade.getUserId(), pageSize, pageNum);
 		return CommonResult.success(CommonPage.restPage(logs));
 	}
 }

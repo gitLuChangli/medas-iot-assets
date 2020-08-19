@@ -8,7 +8,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>assets-security</module>
-		<module>assets-entities</module>
 		<module>assets-common</module>
 		<module>assets-admin</module>
 		<module>assets-mbg</module>

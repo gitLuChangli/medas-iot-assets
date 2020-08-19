@@ -1,13 +1,12 @@
 package com.foxconn.iot.assets.service;
 
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.foxconn.iot.assets.model.UmsMenu;
-import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
-
-import java.util.List;
 
 /**
  * 后台角色管理Service
@@ -27,17 +26,6 @@ public interface UmsRoleService {
      * 批量删除角色
      */
     int delete(List<Long> ids);
-
-    /**
-     * 获取指定角色权限
-     */
-    List<UmsPermission> getPermissionList(Long roleId);
-
-    /**
-     * 修改指定角色的权限
-     */
-    @Transactional
-    int updatePermission(Long roleId, List<Long> permissionIds);
 
     /**
      * 获取所有角色列表

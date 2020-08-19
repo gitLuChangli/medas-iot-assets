@@ -41,8 +41,8 @@ public class AssetsServiceImpl implements AssetsService {
 	}
 
 	@Override
-	public Page<Asset> query(Long companyId, Pageable pageable) {
-		return assetDao.query(companyId, pageable);
+	public Page<Asset> query(Long companyId, Pageable pageable, String keyword) {
+		return assetDao.query(companyId, pageable, keyword);
 	}
 
 	@Override

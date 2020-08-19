@@ -11,7 +11,7 @@ public interface AssetsService {
 	
 	long save(Long companyId, List<Asset> assets);
 	
-	Page<Asset> query(Long companyId, Pageable pageable);
+	Page<Asset> query(Long companyId, Pageable pageable, String keyword);
 	
 	List<Asset> query(Long companyId, List<Long> assetIds);
 }
