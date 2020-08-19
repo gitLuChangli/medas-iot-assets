@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.mapper.UmsResourceCategoryMapper;
 import com.foxconn.iot.assets.mapper.UmsResourceMapper;
 import com.foxconn.iot.assets.model.UmsResourceCategory;
@@ -33,6 +34,7 @@ public class UmsResourceCategoryServiceImpl implements UmsResourceCategoryServic
 
 	@Override
 	public int create(UmsResourceCategory umsResourceCategory) {
+		umsResourceCategory.setId(Snowflaker.getId());
 		umsResourceCategory.setCreateTime(new Date());
 		return resourceCategoryMapper.insert(umsResourceCategory);
 	}

@@ -18,5 +18,10 @@
 			<groupId>com.foxconn.iot</groupId>
 			<artifactId>assets-common</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>easyexcel</artifactId>
+			<version>2.2.4</version>
+		</dependency>
 	</dependencies>
 </project>

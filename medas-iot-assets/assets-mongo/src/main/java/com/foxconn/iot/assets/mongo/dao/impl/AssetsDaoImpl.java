@@ -1,5 +1,6 @@
 package com.foxconn.iot.assets.mongo.dao.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class AssetsDaoImpl implements AssetsDao {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public void save(List<Asset> assets) {
-		mongoTemplate.insertAll(assets);
+	public long save(List<Asset> assets) {
+		Collection<Asset> result = mongoTemplate.insert(assets, Asset.class);
+		return result.size();
 	}
 
 	@Override

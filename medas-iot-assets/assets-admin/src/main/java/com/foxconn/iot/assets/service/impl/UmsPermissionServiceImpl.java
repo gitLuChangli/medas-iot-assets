@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.dto.UmsPermissionNode;
 import com.foxconn.iot.assets.mapper.UmsPermissionMapper;
 import com.foxconn.iot.assets.model.UmsPermission;
@@ -24,6 +25,7 @@ public class UmsPermissionServiceImpl implements UmsPermissionService {
 
 	@Override
 	public int create(UmsPermission permission) {
+		permission.setId(Snowflaker.getId());
 		permission.setStatus(1);
 		permission.setCreateTime(new Date());
 		permission.setSort(0);

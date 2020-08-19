@@ -17,9 +17,9 @@ public interface WorkOrderDao {
 	
 	long setWorkers(Long id, List<String> usernames);
 	
-	long complete(Long id, String note);	
+	long complete(Long companyId, Long id, String note);	
 	
-	long delete(Long id);
+	long delete(Long companyId, Long id);
 	
 	Page<WorkOrder> queryByUsername(String username, String start, String end, Pageable pageable);
 	
@@ -28,4 +28,6 @@ public interface WorkOrderDao {
 	long inventory(Long id,  Long assetId, String username, String nickname, String completeTime, String note, String building, String floor, String XT);
 	
 	long updateCounted(Long id);
+	
+	WorkOrder query(Long companyId, Long workId);
 }

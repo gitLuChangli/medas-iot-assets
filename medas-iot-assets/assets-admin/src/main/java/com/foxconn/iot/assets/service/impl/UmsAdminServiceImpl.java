@@ -35,7 +35,6 @@ import com.foxconn.iot.assets.dao.UmsCompanyRelationDao;
 import com.foxconn.iot.assets.dto.UmsAdminDto;
 import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
-import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.mapper.UmsAdminLoginLogMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminMapper;
 import com.foxconn.iot.assets.mapper.UmsAdminPermissionRelationMapper;
@@ -44,6 +43,7 @@ import com.foxconn.iot.assets.mapper.UmsCompanyMapper;
 import com.foxconn.iot.assets.model.UmsAdmin;
 import com.foxconn.iot.assets.model.UmsAdminExample;
 import com.foxconn.iot.assets.model.UmsAdminLoginLog;
+import com.foxconn.iot.assets.model.UmsAdminLoginLogExample;
 import com.foxconn.iot.assets.model.UmsAdminPermissionRelation;
 import com.foxconn.iot.assets.model.UmsAdminPermissionRelationExample;
 import com.foxconn.iot.assets.model.UmsAdminRoleRelation;
@@ -60,6 +60,10 @@ import com.github.pagehelper.PageHelper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
+import eu.bitwalker.useragentutils.Version;
 
 /**
  * UmsAdminService实现类
@@ -114,6 +118,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	public UmsAdmin register(UmsAdminParam umsAdminParam) {
 		UmsAdmin umsAdmin = new UmsAdmin();
 		BeanUtils.copyProperties(umsAdminParam, umsAdmin);
+		umsAdmin.setId(Snowflaker.getId());
 		umsAdmin.setCreateTime(new Date());
 		umsAdmin.setStatus(1);
 		// 查询是否有相同用户名的用户
@@ -172,6 +177,25 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = attributes.getRequest();
 		loginLog.setIp(request.getRemoteAddr());
+		String agent = request.getHeader("Agent");
+		if (!StringUtils.isEmpty(agent)) {
+			loginLog.setUserAgent(agent);
+		} else {
+			UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));		
+			Browser browser = userAgent.getBrowser();
+			OperatingSystem operatingSystem = userAgent.getOperatingSystem();
+			Version browserVersion = userAgent.getBrowserVersion();		
+			if (browser != null) {
+				agent = browser.getName();
+			}
+			if (browserVersion != null) {
+				agent += browserVersion.getVersion();
+			}
+			if (operatingSystem != null) {
+				agent += "/" + operatingSystem.getName(); 
+			}
+		}
+		loginLog.setUserAgent(agent);
 		loginLogMapper.insert(loginLog);
 	}
 
@@ -327,29 +351,21 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	}
 
 	@Override
-	public int updatePassword(UpdateAdminPasswordParam param) {
-		if (StrUtil.isEmpty(param.getUsername()) || StrUtil.isEmpty(param.getOldPassword())
-				|| StrUtil.isEmpty(param.getNewPassword())) {
+	public int updatePassword(String username, String oldPassword, String newPassword) {
+		AdminUserDetails user = loadUserByUsername(username);
+		if (passwordEncoder.matches(user.getPassword(), oldPassword)) {
 			return -1;
 		}
-		UmsAdminExample example = new UmsAdminExample();
-		example.createCriteria().andUsernameEqualTo(param.getUsername());
-		List<UmsAdmin> adminList = adminMapper.selectByExample(example);
-		if (CollUtil.isEmpty(adminList)) {
-			return -2;
-		}
-		UmsAdmin umsAdmin = adminList.get(0);
-		if (!passwordEncoder.matches(param.getOldPassword(), umsAdmin.getPassword())) {
-			return -3;
-		}
-		umsAdmin.setPassword(passwordEncoder.encode(param.getNewPassword()));
-		adminMapper.updateByPrimaryKey(umsAdmin);
-		adminCacheService.delAdmin(umsAdmin.getId());
-		return 1;
+		UmsAdmin admin = new UmsAdmin();
+		admin.setId(user.getUserId());
+		admin.setPassword(passwordEncoder.encode(newPassword));
+		int result = adminMapper.updateByPrimaryKeySelective(admin);
+		if (result > 0) adminCacheService.delAdmin(user.getUserId());
+		return result;
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) {
+	public AdminUserDetails loadUserByUsername(String username) {
 		// 获取用户信息
 		UmsAdmin admin = getAdminByUsername(username);
 		if (admin != null) {
@@ -370,7 +386,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		UmsCompany company = companyMapper.selectByPrimaryKey(companyId);
 		if (company == null) {
 			return 0;
-		}
+		}		
 		umsAdmin.setCompanyId(companyId);
 		umsAdmin.setPassword(passwordEncoder.encode("password"));
 		umsAdmin.setId(Snowflaker.getId());
@@ -392,6 +408,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		}
 		umsAdmin.setCompanyId(companyId);
 		umsAdmin.setId(id);
+		adminCacheService.delAdmin(id);
 		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
 	}
 	
@@ -404,7 +421,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	public int disable(Long id, int status) {
 		UmsAdmin umsAdmin = new UmsAdmin();
 		umsAdmin.setId(id);
-		umsAdmin.setStatus(status);		
+		umsAdmin.setStatus(status);
+		adminCacheService.delAdmin(id);
 		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
 	}
 	
@@ -413,6 +431,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 		UmsAdmin umsAdmin = new UmsAdmin();
 		umsAdmin.setId(id);
 		umsAdmin.setPassword(passwordEncoder.encode("password"));
+		adminCacheService.delAdmin(id);
 		return adminMapper.updateByPrimaryKeySelective(umsAdmin);
 	}
 	
@@ -452,5 +471,25 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 	@Override
 	public UmsAdminVo queryInfo(String username) {
 		return adminDao.queryInfo(username);
+	}
+
+	@Override
+	public int updateInformation(Long userid, String email, String phone, String ext) {
+		UmsAdmin admin = new UmsAdmin();
+		admin.setId(userid);
+		admin.setEmail(email);
+		admin.setPhone(phone);
+		admin.setExt(ext);
+		return adminMapper.updateByPrimaryKeySelective(admin);
+	}
+	
+	@Override
+	public List<UmsAdminLoginLog> listLoginLog(Long userid, Integer pageSize, Integer pageNum) {
+		UmsAdminLoginLogExample example = new UmsAdminLoginLogExample();
+		UmsAdminLoginLogExample.Criteria criteria = example.createCriteria();
+		criteria.andAdminIdEqualTo(userid);
+		example.setOrderByClause("create_time desc");
+		PageHelper.startPage(pageNum, pageSize);
+		return loginLogMapper.selectByExample(example);
 	}
 }

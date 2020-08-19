@@ -40,4 +40,13 @@
 		where a.username=#{username}
 	</select>
 	
+	<select id="matchUsernames" resultType="java.lang.String">
+		select a.username from ums_admin a where a.username in 
+		<foreach collection="usernames" index="index" item="username" open="("
+			separator="," close=")">
+			#{username}
+		</foreach>
+		and a.company_id=#{companyId} and a.status=1
+	</select>
+	
 </mapper>

@@ -9,7 +9,9 @@ import com.foxconn.iot.assets.mongo.document.Asset;
 
 public interface AssetsService {
 	
-	void save(Long companyId, List<Asset> assets);
+	long save(Long companyId, List<Asset> assets);
 	
 	Page<Asset> query(Long companyId, Pageable pageable);
+	
+	List<Asset> query(Long companyId, List<Long> assetIds);
 }

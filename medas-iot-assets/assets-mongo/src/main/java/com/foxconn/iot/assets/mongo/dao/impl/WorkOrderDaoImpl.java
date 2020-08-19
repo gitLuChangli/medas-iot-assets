@@ -125,21 +125,21 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 	}
 
 	@Override
-	public long complete(Long id, String note) {
+	public long complete(Long companyId, Long id, String note) {
 		Update update = new Update();
 		update.set("status", 1);
 		update.set("note", note);
 		update.set("completeTime", new Date());
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(id));
+		query.addCriteria(Criteria.where("id").is(id).and("companyId").is(companyId));
 		UpdateResult result = mongoTemplate.updateFirst(query, update, WorkOrder.class);
 		return result.getModifiedCount();
 	}
 	
 	@Override
-	public long delete(Long id) {
+	public long delete(Long companyId, Long id) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(id));
+		query.addCriteria(Criteria.where("id").is(id).and("companyId").is(companyId));
 		DeleteResult result = mongoTemplate.remove(query, WorkOrder.class);
 		return result.getDeletedCount();
 	}
@@ -232,7 +232,8 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 			update.set("items.$.xianti", XT);
 		}
 		Query query = new Query();
-		query.addCriteria(Criteria.where("id").is(id)).addCriteria(Criteria.where("items.asset.id").is(assetId));
+		//query.addCriteria(Criteria.where("id").is(id)).addCriteria(Criteria.where("items.asset.id").is(assetId));
+		query.addCriteria(Criteria.where("id").is(id)).addCriteria(Criteria.where("items.id").is(assetId));
 		UpdateResult result = mongoTemplate.updateFirst(query, update, WorkOrder.class);
 		return result.getModifiedCount();
 	}
@@ -243,7 +244,8 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 				Aggregation.match(Criteria.where("_id").is(id)), 
 				Aggregation.unwind("items"), 
 				Aggregation.match(Criteria.where("items.status").is(1)),
-				Aggregation.group("items.asset.id").count().as("counted"));
+				//Aggregation.group("items.asset.id").count().as("counted"));
+				Aggregation.group("items.id").count().as("counted"));
 		
 		AggregationResults<BasicDBObject> ar = mongoTemplate.aggregate(aggregation, "work_order", BasicDBObject.class);
 		if (ar.getMappedResults() == null || ar.getMappedResults().size() == 0) {
@@ -256,5 +258,13 @@ public class WorkOrderDaoImpl implements WorkOrderDao {
 		query2.addCriteria(Criteria.where("id").is(id));
 		UpdateResult result = mongoTemplate.updateFirst(query2, update, WorkOrder.class);
 		return result.getMatchedCount();
+	}
+
+	@Override
+	public WorkOrder query(Long companyId, Long workId) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("companyId").is(companyId).and("id").is(workId));
+		WorkOrder workOrder = mongoTemplate.findOne(query, WorkOrder.class);
+		return workOrder;
 	}
 }

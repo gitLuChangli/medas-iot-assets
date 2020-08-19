@@ -9,7 +9,7 @@ import com.foxconn.iot.assets.mongo.document.Asset;
 
 public interface AssetsDao {
 	
-	void save(List<Asset> assets);
+	long save(List<Asset> assets);
 	
 	Page<Asset> query(Long companyId, Pageable pageable);
 	

@@ -17,12 +17,25 @@ import com.foxconn.iot.assets.model.UmsResource;
 public class AdminUserDetails implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
-
-	private UmsAdmin umsAdmin;
+	
+	private Long userId;
+	
+	private String username;
+	
+	private String password;
+	
+	private Long companyId;
+	
+	private Integer status;
+	
 	private List<UmsResource> resourceList;
 
 	public AdminUserDetails(UmsAdmin umsAdmin, List<UmsResource> resourceList) {
-		this.umsAdmin = umsAdmin;
+		this.userId = umsAdmin.getId();
+		this.username = umsAdmin.getUsername();
+		this.password = umsAdmin.getPassword();
+		this.companyId = umsAdmin.getCompanyId();
+		this.status = umsAdmin.getStatus();
 		this.resourceList = resourceList;
 	}
 
@@ -35,12 +48,12 @@ public class AdminUserDetails implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return umsAdmin.getPassword();
+		return this.password;
 	}
 
 	@Override
 	public String getUsername() {
-		return umsAdmin.getUsername();
+		return this.username;
 	}
 
 	@Override
@@ -60,6 +73,14 @@ public class AdminUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return umsAdmin.getStatus().equals(1);
+		return this.status.equals(1);
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public Long getCompanyId() {
+		return this.companyId;
 	}
 }

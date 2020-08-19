@@ -14,4 +14,6 @@ public interface UmsAdminDao {
 	List<Long> queryCompanyRelation(@Param("userid") Long userid);
 	
 	UmsAdminVo queryInfo(@Param("username") String username);
+	
+	List<String> matchUsernames(@Param("companyId") Long companyId, @Param("usernames") List<String> usernames);
 }

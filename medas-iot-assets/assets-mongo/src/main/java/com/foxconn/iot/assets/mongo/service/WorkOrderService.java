@@ -20,13 +20,15 @@ public interface WorkOrderService {
 	long setWorkers(Long id, List<String> usernames);
 	
 	@Transactional
-	long complete(Long id, String note);
+	long complete(Long companyId, Long id, String note);
 	
 	@Transactional
-	long delete(Long id);
+	long delete(Long companyId, Long id);
 	
 	Page<WorkOrder> queryByUsername(String username, String start, String end, Pageable pageable);
 	
 	@Transactional
 	long syncHistory(ArrayList<AssetHistoryItem> items);
+	
+	WorkOrder query(Long companyId, Long workId);
 }

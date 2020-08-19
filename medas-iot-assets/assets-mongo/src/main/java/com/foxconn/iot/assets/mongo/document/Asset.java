@@ -29,51 +29,11 @@ public class Asset {
 
 	private String shbSpec;
 
-	private String fyType;
-
-	private String unit;
-
-	private String price;
-
-	private String chshCode;
-
-	private String chshName;
-
-	private String xqDepartment;
-
-	private String shbArea;
-
-	private String shbWeight;
-
-	private String shbSN;
-
-	private String project;
-
-	private String segment;
-
-	private String gzhName;
-
-	private String shbStatus;
-
 	private String building;
 
 	private String floor;
 
 	private String xianti;
-
-	private String poNum;
-
-	private String lyEmp;
-
-	private String lyEmpName;
-
-	private String dhTime;
-
-	private String jyTime;
-
-	private String jyCycle;
-
-	private String note;
 
 	public Long getId() {
 		return id;
@@ -131,110 +91,6 @@ public class Asset {
 		this.shbSpec = shbSpec;
 	}
 
-	public String getFyType() {
-		return fyType;
-	}
-
-	public void setFyType(String fyType) {
-		this.fyType = fyType;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getPrice() {
-		return price;
-	}
-
-	public void setPrice(String price) {
-		this.price = price;
-	}
-
-	public String getChshCode() {
-		return chshCode;
-	}
-
-	public void setChshCode(String chshCode) {
-		this.chshCode = chshCode;
-	}
-
-	public String getChshName() {
-		return chshName;
-	}
-
-	public void setChshName(String chshName) {
-		this.chshName = chshName;
-	}
-
-	public String getXqDepartment() {
-		return xqDepartment;
-	}
-
-	public void setXqDepartment(String xqDepartment) {
-		this.xqDepartment = xqDepartment;
-	}
-
-	public String getShbArea() {
-		return shbArea;
-	}
-
-	public void setShbArea(String shbArea) {
-		this.shbArea = shbArea;
-	}
-
-	public String getShbWeight() {
-		return shbWeight;
-	}
-
-	public void setShbWeight(String shbWeight) {
-		this.shbWeight = shbWeight;
-	}
-
-	public String getShbSN() {
-		return shbSN;
-	}
-
-	public void setShbSN(String shbSN) {
-		this.shbSN = shbSN;
-	}
-
-	public String getProject() {
-		return project;
-	}
-
-	public void setProject(String project) {
-		this.project = project;
-	}
-
-	public String getSegment() {
-		return segment;
-	}
-
-	public void setSegment(String segment) {
-		this.segment = segment;
-	}
-
-	public String getGzhName() {
-		return gzhName;
-	}
-
-	public void setGzhName(String gzhName) {
-		this.gzhName = gzhName;
-	}
-
-	public String getShbStatus() {
-		return shbStatus;
-	}
-
-	public void setShbStatus(String shbStatus) {
-		this.shbStatus = shbStatus;
-	}
-
 	public String getBuilding() {
 		return building;
 	}
@@ -257,61 +113,5 @@ public class Asset {
 
 	public void setXianti(String xianti) {
 		this.xianti = xianti;
-	}
-
-	public String getPoNum() {
-		return poNum;
-	}
-
-	public void setPoNum(String poNum) {
-		this.poNum = poNum;
-	}
-
-	public String getLyEmp() {
-		return lyEmp;
-	}
-
-	public void setLyEmp(String lyEmp) {
-		this.lyEmp = lyEmp;
-	}
-
-	public String getLyEmpName() {
-		return lyEmpName;
-	}
-
-	public void setLyEmpName(String lyEmpName) {
-		this.lyEmpName = lyEmpName;
-	}
-
-	public String getDhTime() {
-		return dhTime;
-	}
-
-	public void setDhTime(String dhTime) {
-		this.dhTime = dhTime;
-	}
-
-	public String getJyTime() {
-		return jyTime;
-	}
-
-	public void setJyTime(String jyTime) {
-		this.jyTime = jyTime;
-	}
-
-	public String getJyCycle() {
-		return jyCycle;
-	}
-
-	public void setJyCycle(String jyCycle) {
-		this.jyCycle = jyCycle;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
 	}
 }

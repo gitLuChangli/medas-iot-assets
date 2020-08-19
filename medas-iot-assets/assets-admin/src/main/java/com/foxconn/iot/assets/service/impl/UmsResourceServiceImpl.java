@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.mapper.UmsResourceMapper;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsResourceExample;
@@ -27,6 +28,7 @@ public class UmsResourceServiceImpl implements UmsResourceService {
 
 	@Override
 	public int create(UmsResource umsResource) {
+		umsResource.setId(Snowflaker.getId());
 		umsResource.setCreateTime(new Date());
 		return resourceMapper.insert(umsResource);
 	}

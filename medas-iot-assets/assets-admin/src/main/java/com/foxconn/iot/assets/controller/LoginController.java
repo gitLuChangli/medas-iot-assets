@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,10 +23,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.foxconn.iot.assets.bo.AdminUserDetails;
+import com.foxconn.iot.assets.common.api.CommonPage;
 import com.foxconn.iot.assets.common.api.CommonResult;
 import com.foxconn.iot.assets.common.api.VerificationCode;
+import com.foxconn.iot.assets.component.IAuthenticationFacade;
+import com.foxconn.iot.assets.dto.ModifyMyself;
 import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsMenuNode;
+import com.foxconn.iot.assets.model.UmsAdminLoginLog;
 import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.service.UmsAdminService;
 import com.foxconn.iot.assets.service.UmsMenuService;
@@ -46,6 +54,8 @@ public class LoginController {
 	private UmsAdminService adminService;
 	@Autowired
 	private UmsMenuService menuService;
+	@Autowired
+	private IAuthenticationFacade authenticationFacade;
 
 	@ApiOperation(value = "获取验证码")
 	@GetMapping("/vcode")
@@ -97,7 +107,7 @@ public class LoginController {
 	}
 	
 	@ApiOperation(value = "获取个人信息")
-	@RequestMapping(value = "/mine", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/mine", method = RequestMethod.GET)
 	public CommonResult<?> mineInformation(Principal principal) {
 		String username = principal.getName();
 		UmsAdminVo admin = adminService.queryInfo(username);		
@@ -105,10 +115,44 @@ public class LoginController {
 	}
 	
 	@ApiOperation(value = "获取个人菜单")
-	@GetMapping(value = "/mine/menus")
+	@GetMapping(value = "/api/mine/menus")
 	public CommonResult<?> mineMenus(Principal principal) {
 		String username = principal.getName();
 		List<UmsMenuNode> menus = menuService.treeList(username);
 		return CommonResult.success(menus);
+	}
+	
+	@ApiOperation(value = "修改个人密码")
+	@PutMapping(value = "/api/mine/password")
+	public CommonResult<?> modifySelfPassword(@RequestBody @JsonView(ModifyMyself.Password.class) ModifyMyself myself, BindingResult result) {
+		Authentication authentication = authenticationFacade.getAuthentication();
+		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
+		int status = adminService.updatePassword(user.getUsername(), myself.getPassword(), myself.getNewpwd());
+		if (status == -1) {
+			return CommonResult.failed("密码错误");
+		} else if (status > 0) {
+			return CommonResult.success(null);
+		}
+		return CommonResult.failed();
+	}
+	
+	@ApiOperation(value = "修改个人信息")
+	@PutMapping(value = "/api/mine/information")
+	public CommonResult<?> modifyMyselfInformation(@RequestBody @JsonView(ModifyMyself.Information.class) ModifyMyself myself, BindingResult result) {
+		Authentication authentication = authenticationFacade.getAuthentication();
+		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
+		int status = adminService.updateInformation(user.getUserId(), myself.getEmail(), myself.getPhone(), myself.getExt());
+		if (status > 0) return CommonResult.success(null);
+		else return CommonResult.failed();
+	}
+	
+	@ApiOperation(value = "查看个人操作记录")
+	@GetMapping(value = "/api/mine/operation")
+	public CommonResult<?> mineOperation(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+			@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+		Authentication authentication = authenticationFacade.getAuthentication();
+		AdminUserDetails user = (AdminUserDetails) authentication.getPrincipal();
+		List<UmsAdminLoginLog> logs = adminService.listLoginLog(user.getUserId(), pageSize, pageNum);
+		return CommonResult.success(CommonPage.restPage(logs));
 	}
 }

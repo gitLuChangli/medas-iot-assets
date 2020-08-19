@@ -16,7 +16,6 @@ import com.foxconn.iot.assets.mongo.dao.AssetsDao;
 import com.foxconn.iot.assets.mongo.dao.WorkOrderDao;
 import com.foxconn.iot.assets.mongo.dao.dto.AssetHistoryItem;
 import com.foxconn.iot.assets.mongo.document.Asset;
-import com.foxconn.iot.assets.mongo.document.AssetSimple;
 import com.foxconn.iot.assets.mongo.document.WorkOrder;
 import com.foxconn.iot.assets.mongo.document.WorkOrderItem;
 import com.foxconn.iot.assets.mongo.service.WorkOrderService;
@@ -35,10 +34,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 		WorkOrder workOrder = new WorkOrder();
 		List<WorkOrderItem> items = new ArrayList<>();
 		for (Asset asset : assets) {
-			AssetSimple simple = new AssetSimple();
 			WorkOrderItem item = new WorkOrderItem();
-			BeanUtils.copyProperties(asset, simple);
-			item.setAsset(simple);
+			BeanUtils.copyProperties(asset, item);
 			items.add(item);
 		}
 		workOrder.setId(Snowflaker.getId());
@@ -63,13 +60,13 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 	}
 
 	@Override
-	public long complete(Long woId, String note) {
-		return workOrderDao.complete(woId, note);
+	public long complete(Long companyId, Long woId, String note) {
+		return workOrderDao.complete(companyId, woId, note);
 	}
 
 	@Override
-	public long delete(Long id) {
-		return workOrderDao.delete(id);
+	public long delete(Long companyId, Long id) {
+		return workOrderDao.delete(companyId, id);
 	}
 
 	@Override
@@ -108,5 +105,10 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 			count = workOrderDao.updateCounted(id);
 		}
 		return count;
+	}
+	
+	@Override
+	public WorkOrder query(Long companyId, Long workId) {
+		return workOrderDao.query(companyId, workId);
 	}
 }

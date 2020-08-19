@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.dao.UmsAdminDao;
 import com.foxconn.iot.assets.dto.UmsMenuNode;
 import com.foxconn.iot.assets.mapper.UmsMenuMapper;
@@ -28,6 +29,7 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 
 	@Override
 	public int create(UmsMenu umsMenu) {
+		umsMenu.setId(Snowflaker.getId());
 		umsMenu.setCreateTime(new Date());
 		updateLevel(umsMenu);
 		return menuMapper.insert(umsMenu);

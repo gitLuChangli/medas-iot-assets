@@ -1,19 +1,19 @@
 package com.foxconn.iot.assets.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
+import com.foxconn.iot.assets.bo.AdminUserDetails;
 import com.foxconn.iot.assets.dto.UmsAdminDto;
 import com.foxconn.iot.assets.dto.UmsAdminLoginParam;
 import com.foxconn.iot.assets.dto.UmsAdminParam;
-import com.foxconn.iot.assets.dto.UpdateAdminPasswordParam;
 import com.foxconn.iot.assets.model.UmsAdmin;
+import com.foxconn.iot.assets.model.UmsAdminLoginLog;
 import com.foxconn.iot.assets.model.UmsAdminVo;
 import com.foxconn.iot.assets.model.UmsPermission;
 import com.foxconn.iot.assets.model.UmsResource;
 import com.foxconn.iot.assets.model.UmsRole;
-
-import java.util.List;
 
 /**
  * 后台管理员Service
@@ -91,14 +91,27 @@ public interface UmsAdminService {
     List<UmsPermission> getPermissionList(Long adminId);
 
     /**
-     * 修改密码
+     * 用户修改密码
      */
-    int updatePassword(UpdateAdminPasswordParam updatePasswordParam);
+    @Transactional
+    int updatePassword(String username, String oldPassword, String newPassword);
+    
+    /**
+     * 用户修改个人信息
+     * 
+     * @param userid
+     * @param email
+     * @param phone
+     * @param ext
+     * @return
+     */
+    @Transactional
+    int updateInformation(Long userid, String email, String phone, String ext);
 
     /**
      * 获取用户信息
      */
-    UserDetails loadUserByUsername(String username);
+    AdminUserDetails loadUserByUsername(String username);
     
     int create(UmsAdminDto admin);
     
@@ -134,4 +147,9 @@ public interface UmsAdminService {
      * 查看用户基本信息 
      */
     UmsAdminVo queryInfo(String username);
+    
+    /**
+     * 列出用户的登录记录 
+     */
+    List<UmsAdminLoginLog> listLoginLog(Long userid, Integer pageSize, Integer pageNum);
 }

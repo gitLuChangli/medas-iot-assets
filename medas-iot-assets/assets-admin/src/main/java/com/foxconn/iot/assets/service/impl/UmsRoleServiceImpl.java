@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.foxconn.iot.assets.common.api.Snowflaker;
 import com.foxconn.iot.assets.dao.UmsRoleDao;
 import com.foxconn.iot.assets.dao.UmsRolePermissionRelationDao;
 import com.foxconn.iot.assets.mapper.UmsRoleMapper;
@@ -52,6 +53,7 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 
 	@Override
 	public int create(UmsRole role) {
+		role.setId(Snowflaker.getId());
 		role.setCreateTime(new Date());
 		role.setAdminCount(0);
 		role.setSort(0);
@@ -146,6 +148,7 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 		// 批量插入新关系
 		for (Long menuId : menuIds) {
 			UmsRoleMenuRelation relation = new UmsRoleMenuRelation();
+			relation.setId(Snowflaker.getId());
 			relation.setRoleId(roleId);
 			relation.setMenuId(menuId);
 			roleMenuRelationMapper.insert(relation);
@@ -162,6 +165,7 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 		// 批量插入新关系
 		for (Long resourceId : resourceIds) {
 			UmsRoleResourceRelation relation = new UmsRoleResourceRelation();
+			relation.setId(Snowflaker.getId());
 			relation.setRoleId(roleId);
 			relation.setResourceId(resourceId);
 			roleResourceRelationMapper.insert(relation);
