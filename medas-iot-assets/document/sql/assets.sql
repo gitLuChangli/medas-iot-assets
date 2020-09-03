@@ -283,3 +283,16 @@ CREATE TABLE `tb_module_resource` (
   unique key (`name`, `app_id`)
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='模块资源表';
 
+-- ----------------------------
+-- Table structure for tb_tag_prefix
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_tag_prefix`;
+CREATE TABLE `tb_tag_prefix`(
+	`id` bigint(20) not null,
+    `k` varchar(100) not null,
+    `v` varchar(100) not null,
+    primary key (`id`),
+    unique key (`k`),
+    unique key (`v`)
+) ENGINE=InnoDB CHARSET=utf8 COMMENT='电子标签前缀表';
+

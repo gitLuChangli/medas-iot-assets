@@ -2,9 +2,11 @@ package com.foxconn.iot.file.template;
 
 public class AssetsTemplate {
 	
-	private String gzhNum;
+	private Long index;
 	
 	private String cchNum;
+	
+	private String gzhNum;
 	
 	private String shbName;
 	
@@ -18,14 +20,14 @@ public class AssetsTemplate {
 	
 	private String xianti;
 
-	public String getGzhNum() {
-		return gzhNum;
+	public Long getIndex() {
+		return index;
 	}
 
-	public void setGzhNum(String gzhNum) {
-		this.gzhNum = gzhNum;
+	public void setIndex(Long index) {
+		this.index = index;
 	}
-
+	
 	public String getCchNum() {
 		return cchNum;
 	}
@@ -34,6 +36,15 @@ public class AssetsTemplate {
 		this.cchNum = cchNum;
 	}
 
+	public String getGzhNum() {
+		return gzhNum;
+	}
+
+	public void setGzhNum(String gzhNum) {
+		this.gzhNum = gzhNum;
+	}
+
+	
 	public String getShbName() {
 		return shbName;
 	}

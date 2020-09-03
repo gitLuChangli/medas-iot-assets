@@ -268,6 +268,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 			List<UmsAdminRoleRelation> list = new ArrayList<>();
 			for (Long roleId : roleIds) {
 				UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
+				roleRelation.setId(Snowflaker.getId());
 				roleRelation.setAdminId(adminId);
 				roleRelation.setRoleId(roleId);
 				list.add(roleRelation);

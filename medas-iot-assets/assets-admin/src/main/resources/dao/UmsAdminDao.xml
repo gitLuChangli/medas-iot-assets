@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.foxconn.iot.assets.dao.UmsAdminDao">
 	<select id="queryByUsername"
-		resultMap="com.foxconn.iot.assets.mapper.UmsMenuMapper.BaseResultMap">
-		select d.* from ums_admin a left join
-		ums_admin_role_relation b on a.id = b.admin_id left join
-		ums_role_menu_relation c on b.role_id = c.role_id left join ums_menu d
-		on c.menu_id = d.id where a.username = #{username} order by d.sort asc
+		resultMap="com.foxconn.iot.assets.mapper.UmsMenuMapper.BaseResultMap">		
+		select a.* from ums_menu a 
+		left join ums_role_menu_relation b on a.id=b.menu_id 
+		left join ums_admin_role_relation c on b.role_id = c.role_id 
+		left join ums_admin d on c.admin_id = d.id 
+		where d.username = #{username} order by a.sort asc		
 	</select>
 	
 	<select id="queryCompanyRelation" resultType="java.lang.Long">
