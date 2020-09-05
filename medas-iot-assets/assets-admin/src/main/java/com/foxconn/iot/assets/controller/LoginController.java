@@ -139,7 +139,7 @@ public class LoginController {
 	@ApiOperation(value = "修改个人信息")
 	@PutMapping(value = "/api/mine/information")
 	public CommonResult<?> modifyMyselfInformation(@RequestBody @JsonView(ModifyMyself.Information.class) ModifyMyself myself, BindingResult result) {
-		int status = adminService.updateInformation(authenticationFacade.getCompanyId(), myself.getEmail(), myself.getPhone(), myself.getExt());
+		int status = adminService.updateInformation(authenticationFacade.getUserId(), myself.getEmail(), myself.getPhone(), myself.getExt());
 		if (status > 0) return CommonResult.success(null);
 		else return CommonResult.failed();
 	}

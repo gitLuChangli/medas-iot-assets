@@ -243,10 +243,10 @@ insert into `ums_role_resource_relation` values (6, 1, 6);
 insert into `ums_role_resource_relation` values (7, 1, 7);
 
 -- ----------------------------
--- Table structure for tag_prefix
+-- Table structure for epc_prefix
 -- ----------------------------
-DROP TABLE IF EXISTS `tag_prefix`;
-CREATE TABLE `tag_prefix`(
+DROP TABLE IF EXISTS `epc_prefix`;
+CREATE TABLE `epc_prefix`(
 	`id` bigint(20) not null,
     `k` varchar(100) not null,
     `v` varchar(100) not null,
@@ -256,10 +256,10 @@ CREATE TABLE `tag_prefix`(
 ) ENGINE=InnoDB CHARSET=utf8 COMMENT='电子标签前缀表';
 
 -- ----------------------------
--- Table structure for tag_prefix_company
+-- Table structure for epc_prefix_company
 -- ----------------------------
-DROP TABLE IF EXISTS `tag_prefix_company`;
-CREATE TABLE `tag_prefix_company` (
+DROP TABLE IF EXISTS `epc_prefix_company`;
+CREATE TABLE `epc_prefix_company` (
 	`id` bigint(20) not null,
     `prefix_id` bigint(20) not null,
     `company_id` bigint(20) not null,

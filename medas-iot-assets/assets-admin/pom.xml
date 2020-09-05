@@ -19,12 +19,12 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.foxconn.iot</groupId>
 			<artifactId>assets-common</artifactId>
@@ -34,30 +34,30 @@
 			<groupId>com.foxconn.iot</groupId>
 			<artifactId>assets-security</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.foxconn.iot</groupId>
 			<artifactId>assets-mbg</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.foxconn.iot</groupId>
 			<artifactId>assets-mongo</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>eu.bitwalker</groupId>
-		    <artifactId>UserAgentUtils</artifactId>
-		    <version>1.21</version>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.21</version>
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

@@ -1,6 +1,7 @@
 package com.foxconn.iot.assets.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,6 +83,9 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 	@Override
 	public List<UmsMenuNode> treeList() {
 		List<UmsMenu> menuList = menuMapper.selectByExample(new UmsMenuExample());
+		HashSet<UmsMenu> set = new HashSet<>(menuList);
+		menuList.clear();
+		menuList.addAll(set);
 		List<UmsMenuNode> result = menuList.stream().filter(menu -> menu.getParentId().equals(0L))
 				.map(menu -> covertMenuNode(menu, menuList)).collect(Collectors.toList());
 		return result;
